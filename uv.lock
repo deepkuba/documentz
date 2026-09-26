@@ -304,6 +304,7 @@ dependencies = [
     { name = "documentz-domain" },
     { name = "procrastinate" },
     { name = "psycopg" },
+    { name = "pydantic-settings" },
     { name = "sqlalchemy" },
 ]
 
@@ -314,6 +315,7 @@ requires-dist = [
     { name = "documentz-domain", editable = "packages/domain" },
     { name = "procrastinate", specifier = "==3.10.0" },
     { name = "psycopg", specifier = "==3.3.6" },
+    { name = "pydantic-settings", specifier = "==2.15.0" },
     { name = "sqlalchemy", specifier = "==2.1.1" },
 ]
 

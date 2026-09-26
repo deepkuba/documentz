@@ -9,6 +9,7 @@ dependencies = [
     "documentz-domain",
     "procrastinate==3.10.0",
     "psycopg==3.3.6",
+    "pydantic-settings==2.15.0",
 ]
 
 [build-system]
