@@ -4,7 +4,6 @@ from pathlib import Path
 
 from tools.relevance_fixtures import load_fixture_set, score_rankings
 
-
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 FIXTURE_PATH = REPOSITORY_ROOT / "tests" / "fixtures" / "relevance" / "multilingual.json"
 
@@ -25,7 +24,13 @@ class RelevanceFixtureTests(unittest.TestCase):
 
         self.assertTrue({"source", "summary", "distractor", "multi_topic_long_document"} <= roles)
         self.assertTrue(
-            {"paraphrase", "summary", "cross_language_paraphrase", "late_passage", "boundary_overlap"}
+            {
+                "paraphrase",
+                "summary",
+                "cross_language_paraphrase",
+                "late_passage",
+                "boundary_overlap",
+            }
             <= query_kinds
         )
         long_documents = [
@@ -35,16 +40,24 @@ class RelevanceFixtureTests(unittest.TestCase):
         ]
         self.assertEqual({document["language"] for document in long_documents}, {"en", "pl"})
         self.assertTrue(
-            all(4096 <= len(document["content"].encode("utf-8")) <= 16 * 1024 for document in long_documents)
+            all(
+                4096 <= len(document["content"].encode("utf-8")) <= 16 * 1024
+                for document in long_documents
+            )
         )
-        late_queries = [query for query in fixture_set["queries"] if query["kind"] == "late_passage"]
+        late_queries = [
+            query for query in fixture_set["queries"] if query["kind"] == "late_passage"
+        ]
         boundary_queries = [
             query for query in fixture_set["queries"] if query["kind"] == "boundary_overlap"
         ]
         self.assertEqual({query["language"] for query in late_queries}, {"en", "pl"})
         self.assertEqual({query["language"] for query in boundary_queries}, {"en", "pl"})
         self.assertTrue(
-            all(query["passage_expectation"]["minimum_utf8_offset"] >= 4096 for query in late_queries)
+            all(
+                query["passage_expectation"]["minimum_utf8_offset"] >= 4096
+                for query in late_queries
+            )
         )
         self.assertTrue(
             all(

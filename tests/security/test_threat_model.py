@@ -1,6 +1,5 @@
-from pathlib import Path
 import unittest
-
+from pathlib import Path
 
 ROOT = Path(__file__).parents[2]
 THREAT_MODEL = ROOT / "docs" / "security" / "THREAT_MODEL.md"
