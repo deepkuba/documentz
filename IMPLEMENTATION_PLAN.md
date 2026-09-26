@@ -92,8 +92,8 @@ The exact Python packaging tool, React build tool, OAuth library, and PostgreSQL
 
 - [x] Create the Python workspace, dependency lockfile, formatting, linting, type checking, and pytest configuration.
 - [x] Create the React/TypeScript Portal workspace with formatting, linting, type checking, and component-test configuration.
-- [ ] Add PostgreSQL/pgvector test infrastructure and Alembic.
-- [ ] Add Docker Compose profiles for development, tests, and production-like local execution.
+- [x] Add PostgreSQL/pgvector test infrastructure and Alembic.
+- [x] Add Docker Compose profiles for development, tests, and production-like local execution.
 - [x] Select and record the OAuth library, PostgreSQL job library, and frontend build stack in short ADRs.
 - [ ] Implement typed configuration with file-based secret support and startup validation.
 - [ ] Add `/health/live`, `/health/ready`, structured logging, and request IDs.
