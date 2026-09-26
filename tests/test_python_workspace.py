@@ -22,6 +22,7 @@ class PythonWorkspaceSmokeTests(unittest.TestCase):
                 "documentz-infrastructure",
                 "fastapi==0.141.1",
                 "pydantic-settings==2.15.0",
+                "uvicorn==0.54.0",
             ],
         ),
         "documentz-application": (
