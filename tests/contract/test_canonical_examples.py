@@ -101,6 +101,25 @@ class CanonicalContractExamplesTest(unittest.TestCase):
         for pattern in prohibited:
             self.assertNotRegex(text, pattern)
 
+    def test_mcp_errors_use_the_protocol_error_signal(self) -> None:
+        text = EXAMPLES.read_text(encoding="utf-8")
+        self.assertIn("`CallToolResult.isError`", text)
+        self.assertNotIn('"is_error"', text)
+
+        for operation in MCP_TOOLS:
+            marker = f"<!-- example:mcp:{operation}:error -->"
+            example = text.split(marker, 1)[1].split("```json\n", 1)[1].split("\n```", 1)[0]
+            self.assertEqual({"error"}, set(json.loads(example)))
+
+    def test_snapshot_and_project_update_contracts_are_unambiguous(self) -> None:
+        text = EXAMPLES.read_text(encoding="utf-8")
+        self.assertIn("Historical snapshot projections are separate", text)
+        self.assertRegex(text, r"Snapshot responses do\s+not contain")
+
+        marker = "<!-- example:mcp:update_project:request -->"
+        request = text.split(marker, 1)[1].split("```json\n", 1)[1].split("\n```", 1)[0]
+        self.assertNotIn("archived", json.loads(request))
+
 
 if __name__ == "__main__":
     unittest.main()

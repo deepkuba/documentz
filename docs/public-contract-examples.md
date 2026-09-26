@@ -43,8 +43,9 @@ Example constants used throughout:
 ## Document projections
 
 Projection controls only fields returned after authorization; it never weakens
-authorization or lifecycle eligibility. Lists default to `basic`; direct reads
-default to `content`.
+authorization or lifecycle eligibility. The projections below describe the
+current Context Document resource. Lists default to `basic`; direct reads default
+to `content`.
 
 | Projection | Fields in addition to `document_id`, `project_id`, `snapshot_id`, `kind`, `lifecycle_state`, `created_at`, `updated_at` |
 | --- | --- |
@@ -90,6 +91,13 @@ Canonical shapes:
 }
 ```
 
+Historical snapshot projections are separate because lifecycle belongs to the
+current document, not to an immutable snapshot. Every snapshot projection has
+`document_id`, `snapshot_id`, `kind`, `title`, `origin`, and `created_at`;
+`metadata` adds `custom_kind`, `tags`, `metadata`, and `source_snapshot_ids`, while
+`content` adds exact `content` and `full` adds both groups. Snapshot responses do
+not contain `project_id`, `lifecycle_state`, or `updated_at`.
+
 ## Cursor envelopes
 
 Every list and search success has the same envelope. A cursor is bound to the
@@ -110,8 +118,9 @@ fragment retrieval uses `start_position` and `limit` but returns this envelope.
 ## Stable errors
 
 HTTP errors use the status shown below. MCP tool failures return the same `error`
-object as structured tool output with `is_error: true`; protocol authentication
-failures happen at the HTTP transport boundary.
+object as structured tool output and set the outer MCP `CallToolResult.isError`
+transport field to `true`; the transport envelope is omitted from the examples.
+Protocol authentication failures happen at the HTTP transport boundary.
 
 ```json
 {
@@ -485,7 +494,7 @@ Write results preserve the same idempotency behavior as HTTP.
 ```
 <!-- example:mcp:list_projects:error -->
 ```json
-{"is_error":true,"error":{"code":"cursor_invalid","message":"The cursor cannot be used for this request.","request_id":"req_01J9Y70V6D4K","details":{}}}
+{"error":{"code":"cursor_invalid","message":"The cursor cannot be used for this request.","request_id":"req_01J9Y70V6D4K","details":{}}}
 ```
 
 <!-- example:mcp:create_project:request -->
@@ -498,12 +507,12 @@ Write results preserve the same idempotency behavior as HTTP.
 ```
 <!-- example:mcp:create_project:error -->
 ```json
-{"is_error":true,"error":{"code":"invalid_request","message":"The request is invalid.","request_id":"req_01J9Y70V6D4K","details":{"fields":{"name":"must be unique"}}}}
+{"error":{"code":"invalid_request","message":"The request is invalid.","request_id":"req_01J9Y70V6D4K","details":{"fields":{"name":"must be unique"}}}}
 ```
 
 <!-- example:mcp:update_project:request -->
 ```json
-{"project_id":"prj_01J9Y6F3K2A1","name":"Documentz PoC","description":"Production PoC context","archived":false,"expected_revision":3,"idempotency_key":"idem-project-002"}
+{"project_id":"prj_01J9Y6F3K2A1","name":"Documentz PoC","description":"Production PoC context","expected_revision":3,"idempotency_key":"idem-project-002"}
 ```
 <!-- example:mcp:update_project:success -->
 ```json
@@ -511,7 +520,7 @@ Write results preserve the same idempotency behavior as HTTP.
 ```
 <!-- example:mcp:update_project:error -->
 ```json
-{"is_error":true,"error":{"code":"conflict","message":"The resource changed since the supplied version.","request_id":"req_01J9Y70V6D4K","details":{"expected_revision":3}}}
+{"error":{"code":"conflict","message":"The resource changed since the supplied version.","request_id":"req_01J9Y70V6D4K","details":{"expected_revision":3}}}
 ```
 
 ### Context and snapshot tools
@@ -526,7 +535,7 @@ Write results preserve the same idempotency behavior as HTTP.
 ```
 <!-- example:mcp:list_contexts:error -->
 ```json
-{"is_error":true,"error":{"code":"not_found","message":"The requested resource was not found.","request_id":"req_01J9Y70V6D4K","details":{}}}
+{"error":{"code":"not_found","message":"The requested resource was not found.","request_id":"req_01J9Y70V6D4K","details":{}}}
 ```
 
 <!-- example:mcp:store_context:request -->
@@ -539,7 +548,7 @@ Write results preserve the same idempotency behavior as HTTP.
 ```
 <!-- example:mcp:store_context:error -->
 ```json
-{"is_error":true,"error":{"code":"content_too_large","message":"Content exceeds the allowed UTF-8 byte size.","request_id":"req_01J9Y70V6D4K","details":{"maximum_bytes":16384}}}
+{"error":{"code":"content_too_large","message":"Content exceeds the allowed UTF-8 byte size.","request_id":"req_01J9Y70V6D4K","details":{"maximum_bytes":16384}}}
 ```
 
 <!-- example:mcp:get_context:request -->
@@ -552,7 +561,7 @@ Write results preserve the same idempotency behavior as HTTP.
 ```
 <!-- example:mcp:get_context:error -->
 ```json
-{"is_error":true,"error":{"code":"not_found","message":"The requested resource was not found.","request_id":"req_01J9Y70V6D4K","details":{}}}
+{"error":{"code":"not_found","message":"The requested resource was not found.","request_id":"req_01J9Y70V6D4K","details":{}}}
 ```
 
 <!-- example:mcp:update_context:request -->
@@ -565,7 +574,7 @@ Write results preserve the same idempotency behavior as HTTP.
 ```
 <!-- example:mcp:update_context:error -->
 ```json
-{"is_error":true,"error":{"code":"conflict","message":"The resource changed since the supplied version.","request_id":"req_01J9Y70V6D4K","details":{"expected_snapshot_id":"snap_01J9Y6M6Q8V7"}}}
+{"error":{"code":"conflict","message":"The resource changed since the supplied version.","request_id":"req_01J9Y70V6D4K","details":{"expected_snapshot_id":"snap_01J9Y6M6Q8V7"}}}
 ```
 
 <!-- example:mcp:change_context_lifecycle:request -->
@@ -578,7 +587,7 @@ Write results preserve the same idempotency behavior as HTTP.
 ```
 <!-- example:mcp:change_context_lifecycle:error -->
 ```json
-{"is_error":true,"error":{"code":"conflict","message":"The resource changed since the supplied state.","request_id":"req_01J9Y70V6D4K","details":{"expected_state":"active"}}}
+{"error":{"code":"conflict","message":"The resource changed since the supplied state.","request_id":"req_01J9Y70V6D4K","details":{"expected_state":"active"}}}
 ```
 
 <!-- example:mcp:list_document_snapshots:request -->
@@ -591,7 +600,7 @@ Write results preserve the same idempotency behavior as HTTP.
 ```
 <!-- example:mcp:list_document_snapshots:error -->
 ```json
-{"is_error":true,"error":{"code":"not_found","message":"The requested resource was not found.","request_id":"req_01J9Y70V6D4K","details":{}}}
+{"error":{"code":"not_found","message":"The requested resource was not found.","request_id":"req_01J9Y70V6D4K","details":{}}}
 ```
 
 <!-- example:mcp:get_document_snapshot:request -->
@@ -604,7 +613,7 @@ Write results preserve the same idempotency behavior as HTTP.
 ```
 <!-- example:mcp:get_document_snapshot:error -->
 ```json
-{"is_error":true,"error":{"code":"not_found","message":"The requested resource was not found.","request_id":"req_01J9Y70V6D4K","details":{}}}
+{"error":{"code":"not_found","message":"The requested resource was not found.","request_id":"req_01J9Y70V6D4K","details":{}}}
 ```
 
 ### Fragment Set tools
@@ -623,7 +632,7 @@ not stored; changing an existing position's content is an idempotency conflict.
 ```
 <!-- example:mcp:create_fragment_set:error -->
 ```json
-{"is_error":true,"error":{"code":"invalid_request","message":"The request is invalid.","request_id":"req_01J9Y70V6D4K","details":{"fields":{"fragments.position":"must be unique and in range"}}}}
+{"error":{"code":"invalid_request","message":"The request is invalid.","request_id":"req_01J9Y70V6D4K","details":{"fields":{"fragments.position":"must be unique and in range"}}}}
 ```
 
 <!-- example:mcp:get_fragment_set:request -->
@@ -636,7 +645,7 @@ not stored; changing an existing position's content is an idempotency conflict.
 ```
 <!-- example:mcp:get_fragment_set:error -->
 ```json
-{"is_error":true,"error":{"code":"not_found","message":"The requested resource was not found.","request_id":"req_01J9Y70V6D4K","details":{}}}
+{"error":{"code":"not_found","message":"The requested resource was not found.","request_id":"req_01J9Y70V6D4K","details":{}}}
 ```
 
 <!-- example:mcp:publish_fragment_set:request -->
@@ -649,7 +658,7 @@ not stored; changing an existing position's content is an idempotency conflict.
 ```
 <!-- example:mcp:publish_fragment_set:error -->
 ```json
-{"is_error":true,"error":{"code":"fragment_set_incomplete","message":"The Fragment Set is incomplete.","request_id":"req_01J9Y70V6D4K","details":{"missing_positions":[1]}}}
+{"error":{"code":"fragment_set_incomplete","message":"The Fragment Set is incomplete.","request_id":"req_01J9Y70V6D4K","details":{"missing_positions":[1]}}}
 ```
 
 <!-- example:mcp:abandon_fragment_set:request -->
@@ -662,7 +671,7 @@ not stored; changing an existing position's content is an idempotency conflict.
 ```
 <!-- example:mcp:abandon_fragment_set:error -->
 ```json
-{"is_error":true,"error":{"code":"conflict","message":"A published Fragment Set cannot be abandoned.","request_id":"req_01J9Y70V6D4K","details":{}}}
+{"error":{"code":"conflict","message":"A published Fragment Set cannot be abandoned.","request_id":"req_01J9Y70V6D4K","details":{}}}
 ```
 
 ### Summary and search tools
@@ -677,7 +686,7 @@ not stored; changing an existing position's content is an idempotency conflict.
 ```
 <!-- example:mcp:list_summary_requests:error -->
 ```json
-{"is_error":true,"error":{"code":"cursor_invalid","message":"The cursor cannot be used for this request.","request_id":"req_01J9Y70V6D4K","details":{}}}
+{"error":{"code":"cursor_invalid","message":"The cursor cannot be used for this request.","request_id":"req_01J9Y70V6D4K","details":{}}}
 ```
 
 <!-- example:mcp:decline_summary_request:request -->
@@ -690,7 +699,7 @@ not stored; changing an existing position's content is an idempotency conflict.
 ```
 <!-- example:mcp:decline_summary_request:error -->
 ```json
-{"is_error":true,"error":{"code":"conflict","message":"The Summary Request is no longer pending.","request_id":"req_01J9Y70V6D4K","details":{}}}
+{"error":{"code":"conflict","message":"The Summary Request is no longer pending.","request_id":"req_01J9Y70V6D4K","details":{}}}
 ```
 
 MCP completes that request through `store_context` with this input variant:
@@ -709,7 +718,7 @@ MCP completes that request through `store_context` with this input variant:
 ```
 <!-- example:mcp:search_context:error -->
 ```json
-{"is_error":true,"error":{"code":"cursor_expired","message":"The search cursor has expired.","request_id":"req_01J9Y70V6D4K","details":{}}}
+{"error":{"code":"cursor_expired","message":"The search cursor has expired.","request_id":"req_01J9Y70V6D4K","details":{}}}
 ```
 
 ## Security and trust-boundary notes
@@ -735,4 +744,6 @@ MCP completes that request through `store_context` with this input variant:
   Effective access is computed by the service and is not accepted from callers.
 - HTTP and MCP examples intentionally share field names, result shapes, and error
   codes. Transport-only differences are headers/ETags versus explicit MCP input
-  fields, plus MCP's `content_trust` marker.
+  fields, MCP's `content_trust` marker, and MCP's outer `CallToolResult.isError`.
+  Project archival is an HTTP owner operation; `update_project` cannot change the
+  `archived` field.
