@@ -272,6 +272,10 @@ The embedding service, database, API, and worker receive resource limits because
 
 Daily encrypted backups are sent through Tailscale to a NAS and retained for 30 days. Failed transfers temporarily retain encrypted local backups and raise an alert. Vector indexes are rebuilt rather than backed up. Restoring an older backup replays purge tombstones before the service becomes available.
 
+The non-secret values, ownership, verification steps, and current readiness gaps
+for that environment are tracked in the
+[production and recovery inventory](./docs/operations/production-inventory.md).
+
 ## Security and privacy posture
 
 Documentz treats content, metadata, excerpts, embeddings, and provenance as sensitive data.
