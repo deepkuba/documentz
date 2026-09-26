@@ -1,0 +1,60 @@
+name: documentz
+
+x-postgres-common: &postgres-common
+  image: pgvector/pgvector@sha256:99a149d3c84cfb0f32d8da7d72737e4643468787220af2223418730f8e9e9cdc
+  restart: unless-stopped
+  environment:
+    POSTGRES_DB: documentz
+    POSTGRES_USER: documentz
+    POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    POSTGRES_INITDB_ARGS: --auth-host=scram-sha-256 --data-checksums
+  healthcheck:
+    test: ["CMD-SHELL", "pg_isready --quiet --username documentz --dbname documentz"]
+    interval: 2s
+    timeout: 3s
+    retries: 30
+    start_period: 5s
+  security_opt:
+    - no-new-privileges:true
+
+services:
+  postgres:
+    <<: *postgres-common
+    profiles: ["development"]
+    networks:
+      - database-development
+    volumes:
+      - postgres-development-data:/var/lib/postgresql/data
+      - ./deploy/postgres/init:/docker-entrypoint-initdb.d:ro
+    secrets:
+      - source: postgres-development-password
+        target: postgres_password
+
+  postgres-test:
+    <<: *postgres-common
+    profiles: ["test"]
+    restart: "no"
+    networks:
+      - database-test
+    tmpfs:
+      - /var/lib/postgresql/data:rw,noexec,nosuid,size=512m,mode=0700
+    volumes:
+      - ./deploy/postgres/init:/docker-entrypoint-initdb.d:ro
+    secrets:
+      - source: postgres-test-password
+        target: postgres_password
+
+networks:
+  database-development:
+    internal: true
+  database-test:
+    internal: true
+
+volumes:
+  postgres-development-data:
+
+secrets:
+  postgres-development-password:
+    file: ${DOCUMENTZ_DEV_POSTGRES_PASSWORD_FILE:-.secrets/postgres-development-password}
+  postgres-test-password:
+    file: ${DOCUMENTZ_TEST_POSTGRES_PASSWORD_FILE:-.secrets/postgres-test-password}
