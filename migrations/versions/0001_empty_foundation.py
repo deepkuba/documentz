@@ -4,8 +4,7 @@ Revision ID: 0001_empty_foundation
 Revises:
 """
 
-from typing import Sequence
-
+from collections.abc import Sequence
 
 revision: str = "0001_empty_foundation"
 down_revision: str | None = None

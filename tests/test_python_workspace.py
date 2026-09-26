@@ -38,6 +38,7 @@ class PythonWorkspaceSmokeTests(unittest.TestCase):
                 "documentz-application",
                 "documentz-domain",
                 "procrastinate==3.10.0",
+                "psycopg==3.3.6",
                 "sqlalchemy==2.1.1",
             ],
         ),

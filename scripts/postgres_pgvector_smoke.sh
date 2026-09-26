@@ -17,10 +17,6 @@ case "$profile" in
     ;;
 esac
 
-if ! command -v alembic >/dev/null 2>&1; then
-  echo "alembic is required; bootstrap the pinned Python workspace first" >&2
-  exit 1
-fi
 if [ ! -s "$password_file" ]; then
   echo "database password file is missing or empty: $password_file" >&2
   exit 1
@@ -43,7 +39,7 @@ export DOCUMENTZ_DATABASE_URL="postgresql+psycopg://documentz@${database_host}:5
 docker compose --profile "$profile" exec --no-TTY "$service" \
   psql --username documentz --dbname documentz --set ON_ERROR_STOP=1 \
   --command "SELECT extversion FROM pg_extension WHERE extname = 'vector';"
-alembic -c alembic.ini upgrade head
+.tools/uv-0.12.19/uv run --frozen alembic -c alembic.ini upgrade head
 docker compose --profile "$profile" exec --no-TTY "$service" \
   psql --username documentz --dbname documentz --set ON_ERROR_STOP=1 \
   --command "SELECT version_num FROM alembic_version WHERE version_num = '0001_empty_foundation';"

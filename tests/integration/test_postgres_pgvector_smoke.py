@@ -84,8 +84,22 @@ class PostgresPgvectorSmokeTests(unittest.TestCase):
         smoke_script = REPOSITORY_ROOT / "scripts/postgres_pgvector_smoke.sh"
         self.assertTrue(os.access(smoke_script, os.X_OK))
         smoke_source = smoke_script.read_text(encoding="utf-8")
-        self.assertIn("alembic -c alembic.ini upgrade head", smoke_source)
+        self.assertIn(
+            ".tools/uv-0.12.19/uv run --frozen alembic -c alembic.ini upgrade head",
+            smoke_source,
+        )
+        self.assertNotIn("command -v alembic", smoke_source)
+        self.assertNotIn("\nalembic -c alembic.ini", smoke_source)
         self.assertIn("SELECT extversion FROM pg_extension", smoke_source)
+
+        quality_targets = (REPOSITORY_ROOT / "Makefile").read_text(encoding="utf-8")
+        for target in ("ruff format", "ruff check", "mypy"):
+            self.assertRegex(quality_targets, rf"{target} .*\bmigrations\b")
+
+        infrastructure_manifest = (
+            REPOSITORY_ROOT / "packages/infrastructure/pyproject.toml"
+        ).read_text(encoding="utf-8")
+        self.assertIn('"psycopg==3.3.6"', infrastructure_manifest)
 
 
 if __name__ == "__main__":
