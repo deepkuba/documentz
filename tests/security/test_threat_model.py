@@ -45,6 +45,11 @@ class ThreatModelDocumentationTests(unittest.TestCase):
             "backup checkpoints",
             "missing ledger",
             "tombstones committed after",
+            "durable acknowledgement before content deletion",
+            "write-ahead safety invariant",
+            "irreversibly remove content",
+            "well-formed entries",
+            "acknowledgement loss",
         ):
             self.assertIn(purge_recovery_control, text)
 

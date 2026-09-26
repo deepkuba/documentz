@@ -27,6 +27,7 @@ Application remains constrained to its granted scopes and Personal Projects.
 | PostgreSQL authoritative state, migrations, outbox, jobs, idempotency records, audits, and purge tombstones | Integrity; availability; transactionality; append-only audit behavior; retry safety |
 | Search indexes and embedding vectors | Confidentiality; model/version integrity; rebuildability; never authoritative for access |
 | Backups, retained local backup buffer, restore configuration, and NAS copies | Confidentiality; integrity; recoverability; retention and purge replay |
+| Independent purge ledger, monotonic sequence, backup checkpoints, and append acknowledgements | Authenticity; append-only integrity; rollback/gap detection; durability before destructive purge; availability for every recoverable backup |
 | Service availability and shared-host resources | Bounded CPU, memory, disk, request size, retries, and concurrency |
 | Logs, metrics, traces, errors, and audit views | Operational usefulness without content, queries, credentials, codes, or secrets |
 
@@ -66,6 +67,7 @@ failure must be tested. Internal network placement alone is not authorization.
 | Worker ↔ **embedding service** | Document passages, model/version selection, responses, timeouts and malformed vectors | Private network; strict size/type/dimension checks; resource/time limits; bounded retry/circuit breaking; no credentials or instructions; durable writes survive outage; vectors remain derived |
 | Internet ↔ **shared Caddy reverse proxy** ↔ containers | TLS traffic, forwarded headers, host/path, request bodies, discovery routes | TLS; canonical host/base URL; trusted proxy configuration; `/d` and discovery allowlist; request/body/rate limits; strip untrusted forwarding headers; expose only Caddy; private service networks |
 | Backup process ↔ Tailscale ↔ **NAS backup target** | Encrypted PostgreSQL dumps/configuration, repository metadata, retention and transfer status | Encryption before transfer; separate key recovery; authenticated Tailscale path; integrity verification; least NAS permissions; 30-day retention; bounded local fallback; alerts; no vectors required |
+| Purge coordinator ↔ **independent purge ledger** | Authenticated tombstone append, monotonic sequence/checkpoint, durable acknowledgement, retry/reconciliation, restore replay | Dedicated append-only writer identity; signed or MAC-authenticated records bound to deployment and document tombstone; conditional monotonic append; durable acknowledgement before content deletion; read-only restore identity; gap, rollback, forged-entry, and writer-compromise detection; fail closed when unavailable |
 | Backup/NAS ↔ isolated **restore environment** ↔ production | Potentially stale or tampered dumps, configuration and purge tombstones | Isolated destructive rehearsal; verify/decrypt; restore authoritative data; replay purge tombstones before readiness; rebuild indexes; validate configuration/secrets separately; health gate before traffic |
 
 ### Principal data flows
@@ -82,6 +84,10 @@ failure must be tested. Internal network placement alone is not authorization.
    authorization, publication, lifecycle, snapshot, and summary freshness.
 6. Backup tooling encrypts consistent authoritative dumps before Tailscale/NAS
    transfer. Restore remains unavailable until tombstones replay and indexes rebuild.
+7. A purge coordinator conditionally appends and durably acknowledges the next
+   authenticated tombstone in the independent ledger before it may irreversibly
+   delete content. It then records the database tombstone/deletion and checkpoint;
+   retries reconcile by sequence and record digest after acknowledgement loss.
 
 ## Threat actors and abuse cases
 
@@ -174,6 +180,19 @@ backup checkpoints. A missing ledger, gap, invalid integrity proof, or checkpoin
 mismatch keeps external readiness false. Recovery tests restore backup N and prove
 that tombstones committed after N are replayed before lifecycle/authorization
 checks and index rebuilding permit traffic.
+
+Destructive purge follows a write-ahead safety invariant: it cannot acknowledge
+success or irreversibly remove content until the corresponding authenticated
+ledger record and monotonic sequence are independently durable. A crash before
+ledger acknowledgement leaves content intact and retryable. A crash after durable
+append but before database deletion is reconciled by the same sequence/digest and
+completes deletion idempotently; acknowledgement loss must never append a second
+meaningfully different record. Database checkpoint updates happen only after the
+matching deletion/tombstone transaction commits. Restore accepts records only from
+the configured ledger identity and deployment lineage, and rejects forged but
+well-formed entries, sequence rollback, gaps, digest conflicts, or a checkpoint
+ahead of durable ledger state. Ledger unavailability blocks destructive purge and
+restore readiness rather than weakening the invariant.
 Restored tokens/secrets remain subject to expiry/revocation; separately managed
 production secrets are re-provisioned rather than recovered from source control.
 
@@ -244,6 +263,11 @@ test at the closest public seam and retain it in CI.
   readiness, authorization checks, and complete index rebuild. Restore an older
   backup while replaying independently retained tombstones created afterward, and
   reject missing, truncated, reordered, or tampered ledger input.
+- Crash-test every boundary between ledger append, durable acknowledgement,
+  database tombstone/content deletion, checkpoint update, and client
+  acknowledgement. Prove retries reconcile acknowledgement loss idempotently,
+  content is not deleted before durable append, and forged but structurally valid
+  records cannot purge live restored content.
 
 ## Security review workflow
 
