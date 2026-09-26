@@ -6,15 +6,30 @@ import os
 from collections.abc import Callable
 from enum import StrEnum
 from pathlib import Path
-from typing import Self, cast
+from typing import Any, Self, cast
 from urllib.parse import urlsplit
 
-from pydantic import AnyHttpUrl, Field, SecretStr, field_validator, model_validator
+from pydantic import AnyHttpUrl, Field, SecretStr, ValidationError, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from sqlalchemy.engine import make_url
 from sqlalchemy.exc import ArgumentError
 
 DEFAULT_SECRETS_DIRECTORY = Path(".secrets")
+
+
+class SettingsConfigurationError(ValueError):
+    """A startup failure that never carries submitted configuration values."""
+
+
+def _invalid_field_names(error: ValidationError) -> str:
+    names: set[str] = set()
+    for issue in error.errors(include_input=False, include_context=False, include_url=False):
+        location = " ".join(str(part) for part in issue["loc"]).lower()
+        message = str(issue["msg"]).lower()
+        for name in ("environment", "external_base_url", "database_url"):
+            if name in location or name in message:
+                names.add(name)
+    return ", ".join(sorted(names)) if names else "configuration"
 
 
 class RuntimeEnvironment(StrEnum):
@@ -31,8 +46,18 @@ class ServiceSettings(BaseSettings):
     model_config = SettingsConfigDict(
         case_sensitive=True,
         extra="ignore",
+        hide_input_in_errors=True,
         populate_by_name=True,
     )
+
+    def __init__(self, **values: Any) -> None:
+        invalid_fields: str | None = None
+        try:
+            super().__init__(**values)
+        except ValidationError as error:
+            invalid_fields = _invalid_field_names(error)
+        if invalid_fields is not None:
+            raise SettingsConfigurationError(f"invalid runtime {invalid_fields}")
 
     environment: RuntimeEnvironment = Field(
         RuntimeEnvironment.LOCAL, validation_alias="DOCUMENTZ_ENVIRONMENT"

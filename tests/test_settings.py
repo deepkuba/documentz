@@ -5,8 +5,8 @@ from pathlib import Path
 from unittest.mock import patch
 
 from documentz_api.settings import load_api_settings
+from documentz_infrastructure.settings import SettingsConfigurationError
 from documentz_worker.settings import load_worker_settings
-from pydantic import ValidationError
 
 
 class SettingsTests(unittest.TestCase):
@@ -35,7 +35,7 @@ class SettingsTests(unittest.TestCase):
                     with (
                         tempfile.TemporaryDirectory() as secrets_dir,
                         patch.dict(os.environ, environment, clear=True),
-                        self.assertRaisesRegex(ValidationError, "external_base_url"),
+                        self.assertRaisesRegex(SettingsConfigurationError, "external_base_url"),
                     ):
                         loader(secrets_dir=Path(secrets_dir))
 
@@ -111,7 +111,7 @@ class SettingsTests(unittest.TestCase):
                 with (
                     tempfile.TemporaryDirectory() as secrets_dir,
                     patch.dict(os.environ, environment, clear=True),
-                    self.assertRaisesRegex(ValidationError, "database_url"),
+                    self.assertRaisesRegex(SettingsConfigurationError, "database_url"),
                 ):
                     load_api_settings(secrets_dir=Path(secrets_dir))
 
@@ -126,10 +126,49 @@ class SettingsTests(unittest.TestCase):
                 {"DOCUMENTZ_ENVIRONMENT": "production"},
                 clear=True,
             ):
-                with self.assertRaises(ValidationError) as raised:
+                with self.assertRaises(SettingsConfigurationError) as raised:
                     load_api_settings(secrets_dir=directory)
 
         self.assertNotIn(sentinel, str(raised.exception))
+
+    def test_invalid_database_url_error_redacts_credentials(self) -> None:
+        sentinel = "sentinel"
+        invalid_url = f"postgresql+psycopg://user:{sentinel}@/db"
+        for source in ("environment", "mounted_file"):
+            with self.subTest(source=source), tempfile.TemporaryDirectory() as secrets_dir:
+                directory = Path(secrets_dir)
+                environment = {"DOCUMENTZ_ENVIRONMENT": "local"}
+                if source == "environment":
+                    environment["DOCUMENTZ_DATABASE_URL"] = invalid_url
+                else:
+                    (directory / "DOCUMENTZ_DATABASE_URL").write_text(invalid_url, encoding="utf-8")
+                with patch.dict(os.environ, environment, clear=True):
+                    with self.assertRaises(SettingsConfigurationError) as raised:
+                        load_api_settings(secrets_dir=directory)
+                self.assertNotIn(sentinel, str(raised.exception))
+                self.assertNotIn(invalid_url, repr(raised.exception))
+                self.assertIsNone(raised.exception.__context__)
+
+    def test_invalid_external_url_error_redacts_userinfo(self) -> None:
+        sentinel = "urlsentinel"
+        for invalid_url in (
+            f"https://user:{sentinel}@example.com:443/d",
+            f"https://user:{sentinel}@/d",
+        ):
+            with self.subTest(invalid_url=invalid_url):
+                environment = {
+                    "DOCUMENTZ_ENVIRONMENT": "production",
+                    "DOCUMENTZ_DATABASE_URL": "postgresql+psycopg://documentz@db/documentz",
+                    "DOCUMENTZ_EXTERNAL_BASE_URL": invalid_url,
+                }
+                with (
+                    tempfile.TemporaryDirectory() as secrets_dir,
+                    patch.dict(os.environ, environment, clear=True),
+                    self.assertRaises(SettingsConfigurationError) as raised,
+                ):
+                    load_api_settings(secrets_dir=Path(secrets_dir))
+                self.assertNotIn(sentinel, str(raised.exception))
+                self.assertIsNone(raised.exception.__context__)
 
 
 if __name__ == "__main__":
