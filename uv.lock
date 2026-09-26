@@ -303,6 +303,7 @@ dependencies = [
     { name = "documentz-application" },
     { name = "documentz-domain" },
     { name = "procrastinate" },
+    { name = "psycopg" },
     { name = "sqlalchemy" },
 ]
 
@@ -312,6 +313,7 @@ requires-dist = [
     { name = "documentz-application", editable = "packages/application" },
     { name = "documentz-domain", editable = "packages/domain" },
     { name = "procrastinate", specifier = "==3.10.0" },
+    { name = "psycopg", specifier = "==3.3.6" },
     { name = "sqlalchemy", specifier = "==2.1.1" },
 ]
 

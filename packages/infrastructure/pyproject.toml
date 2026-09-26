@@ -8,6 +8,7 @@ dependencies = [
     "documentz-application",
     "documentz-domain",
     "procrastinate==3.10.0",
+    "psycopg==3.3.6",
 ]
 
 [build-system]

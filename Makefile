@@ -9,16 +9,16 @@ python_workspace_smoke:
 	$(UV) run --frozen pytest -q tests/test_python_workspace.py -k python_workspace_smoke
 
 format:
-	$(UV) run --frozen ruff format apps packages tools tests
+	$(UV) run --frozen ruff format apps migrations packages tools tests
 
 format-check:
-	$(UV) run --frozen ruff format --check apps packages tools tests
+	$(UV) run --frozen ruff format --check apps migrations packages tools tests
 
 lint:
-	$(UV) run --frozen ruff check apps packages tools tests
+	$(UV) run --frozen ruff check apps migrations packages tools tests
 
 type-check:
-	$(UV) run --frozen mypy apps packages tools tests
+	$(UV) run --frozen mypy apps migrations packages tools tests
 
 unit-test:
 	$(UV) run --frozen pytest
