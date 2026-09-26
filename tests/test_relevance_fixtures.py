@@ -31,7 +31,9 @@ class RelevanceFixtureTests(unittest.TestCase):
             if document["fixture_role"] == "multi_topic_long_document"
         ]
         self.assertEqual({document["language"] for document in long_documents}, {"en", "pl"})
-        self.assertTrue(all(len(document["content"]) >= 500 for document in long_documents))
+        self.assertTrue(
+            all(4096 <= len(document["content"].encode("utf-8")) <= 16 * 1024 for document in long_documents)
+        )
 
     def test_identical_rankings_produce_identical_scores(self) -> None:
         fixture_set = load_fixture_set(FIXTURE_PATH)

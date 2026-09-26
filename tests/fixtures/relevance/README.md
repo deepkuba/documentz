@@ -3,7 +3,10 @@
 `multilingual.json` is a synthetic, non-sensitive benchmark corpus for E00. It
 contains English and Polish sources, concise summaries, close lexical
 distractors, paraphrased queries, cross-language queries, and long documents
-that deliberately mix several topics.
+that deliberately mix several topics. Each long fixture is at least 4 KiB in
+UTF-8, carries relevant evidence near both ends among unrelated passages, and
+therefore forces multi-passage behavior for the candidate chunk sizes evaluated
+by E01 while staying below the 16 KiB Context Document limit.
 
 Every query exhaustively partitions all document IDs into
 `relevant_document_ids` and `non_relevant_document_ids`. There are no implicit
