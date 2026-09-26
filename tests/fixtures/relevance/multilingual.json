@@ -1,0 +1,174 @@
+{
+  "fixture_version": 1,
+  "description": "Synthetic multilingual relevance judgments for repeatable retrieval benchmarks.",
+  "data_classification": "synthetic_non_sensitive",
+  "documents": [
+    {
+      "id": "doc-en-rainwater-source",
+      "language": "en",
+      "fixture_role": "source",
+      "title": "Balcony rainwater plan",
+      "content": "A covered barrel collects runoff from the balcony canopy. A mesh screen keeps leaves out, and the stored water is used for herbs during dry weeks. The overflow drains away from the building foundation."
+    },
+    {
+      "id": "doc-en-rainwater-summary",
+      "language": "en",
+      "fixture_role": "summary",
+      "title": "Rainwater plan summary",
+      "content": "Collect roof runoff in a screened container, use it to irrigate balcony herbs, and route excess water safely away from the building."
+    },
+    {
+      "id": "doc-pl-rainwater-source",
+      "language": "pl",
+      "fixture_role": "source",
+      "title": "Plan zbierania deszczówki",
+      "content": "Woda z daszku balkonowego trafia do przykrytego zbiornika z sitkiem na liście. Zapas służy do podlewania ziół w czasie suszy, a przelew odprowadza nadmiar z dala od fundamentów."
+    },
+    {
+      "id": "doc-pl-rainwater-summary",
+      "language": "pl",
+      "fixture_role": "summary",
+      "title": "Podsumowanie planu deszczówki",
+      "content": "Deszczówkę należy gromadzić w osłoniętym pojemniku, podlewać nią zioła i bezpiecznie odprowadzać nadmiar wody."
+    },
+    {
+      "id": "doc-en-bike-source",
+      "language": "en",
+      "fixture_role": "source",
+      "title": "Winter bicycle checklist",
+      "content": "Before winter rides, inspect brake pads, fit lights, lower tire pressure slightly for grip, and wipe salt from the chain after returning home."
+    },
+    {
+      "id": "doc-pl-bike-source",
+      "language": "pl",
+      "fixture_role": "source",
+      "title": "Przygotowanie roweru do zimy",
+      "content": "Przed jazdą zimą sprawdź klocki hamulcowe i lampki. Po powrocie usuń sól z łańcucha, a ciśnienie w oponach obniż nieznacznie dla lepszej przyczepności."
+    },
+    {
+      "id": "doc-en-bread-source",
+      "language": "en",
+      "fixture_role": "source",
+      "title": "Small sourdough schedule",
+      "content": "Feed the starter in the morning, mix the dough at noon, fold it three times, shape it in the evening, and refrigerate overnight before baking."
+    },
+    {
+      "id": "doc-pl-library-source",
+      "language": "pl",
+      "fixture_role": "source",
+      "title": "Zasady wypożyczania książek",
+      "content": "Biblioteka pozwala wypożyczyć pięć książek na trzy tygodnie. Termin można przedłużyć online, jeśli nikt nie zarezerwował danego tytułu."
+    },
+    {
+      "id": "doc-en-multitopic-long",
+      "language": "en",
+      "fixture_role": "multi_topic_long_document",
+      "title": "Community workshop notes",
+      "content": "Garden session: volunteers compared clay and sandy soil, then agreed to collect canopy runoff in a covered barrel. A removable mesh screen will stop leaves and insects. Stored rainwater will irrigate balcony herbs during dry weeks, while a fitted overflow pipe will carry excess water away from the foundation. Kitchen session: the group tested a sourdough timetable, feeding starter after breakfast, folding dough through the afternoon, and chilling the shaped loaf overnight. Bicycle session: riders checked lamps and brake pads, discussed modest tire-pressure changes for winter grip, and planned to rinse road salt from chains. Library session: organizers catalogued donated novels and set a three-week loan period. These independent notes share one document so retrieval should select the relevant passage rather than treating every topic as relevant."
+    },
+    {
+      "id": "doc-pl-multitopic-long",
+      "language": "pl",
+      "fixture_role": "multi_topic_long_document",
+      "title": "Notatki z warsztatów sąsiedzkich",
+      "content": "Ogród: uczestnicy zaplanowali zbieranie wody z daszku do zamkniętego zbiornika. Sitko zatrzyma liście i owady, zapas deszczówki nawodni zioła podczas suszy, a rura przelewowa skieruje nadmiar z dala od fundamentów. Kuchnia: grupa ustaliła harmonogram chleba na zakwasie, od porannego karmienia zaczynu po nocne chłodzenie bochenka. Rowery: sprawdzono lampki i hamulce oraz omówiono usuwanie soli z łańcucha. Biblioteka: skatalogowano podarowane powieści i przyjęto trzytygodniowy termin zwrotu. Tematy są niezależne, mimo że znajdują się w jednym długim dokumencie."
+    },
+    {
+      "id": "doc-en-distractor-water",
+      "language": "en",
+      "fixture_role": "distractor",
+      "title": "Indoor plant watering",
+      "content": "Check potting soil with a finger before watering houseplants. Empty standing water from saucers and keep tropical plants away from cold windows."
+    },
+    {
+      "id": "doc-pl-distractor-weather",
+      "language": "pl",
+      "fixture_role": "distractor",
+      "title": "Prognoza deszczowego weekendu",
+      "content": "W sobotę przewidywane są przelotne opady i silny wiatr. Organizatorzy przełożyli piknik na niedzielne popołudnie."
+    }
+  ],
+  "queries": [
+    {
+      "id": "query-en-rainwater-paraphrase",
+      "coverage": "english",
+      "language": "en",
+      "kind": "paraphrase",
+      "text": "How can I save water from the balcony roof for plants without harming the house?",
+      "relevant_document_ids": ["doc-en-rainwater-source", "doc-en-rainwater-summary", "doc-en-multitopic-long"],
+      "non_relevant_document_ids": ["doc-pl-rainwater-source", "doc-pl-rainwater-summary", "doc-en-bike-source", "doc-pl-bike-source", "doc-en-bread-source", "doc-pl-library-source", "doc-pl-multitopic-long", "doc-en-distractor-water", "doc-pl-distractor-weather"]
+    },
+    {
+      "id": "query-en-bike-paraphrase",
+      "coverage": "english",
+      "language": "en",
+      "kind": "paraphrase",
+      "text": "What maintenance keeps a cycle safe when roads are cold and salty?",
+      "relevant_document_ids": ["doc-en-bike-source", "doc-en-multitopic-long"],
+      "non_relevant_document_ids": ["doc-en-rainwater-source", "doc-en-rainwater-summary", "doc-pl-rainwater-source", "doc-pl-rainwater-summary", "doc-pl-bike-source", "doc-en-bread-source", "doc-pl-library-source", "doc-pl-multitopic-long", "doc-en-distractor-water", "doc-pl-distractor-weather"]
+    },
+    {
+      "id": "query-en-summary",
+      "coverage": "english",
+      "language": "en",
+      "kind": "summary",
+      "text": "Find the concise English note about storing roof runoff for herbs.",
+      "relevant_document_ids": ["doc-en-rainwater-summary"],
+      "non_relevant_document_ids": ["doc-en-rainwater-source", "doc-pl-rainwater-source", "doc-pl-rainwater-summary", "doc-en-bike-source", "doc-pl-bike-source", "doc-en-bread-source", "doc-pl-library-source", "doc-en-multitopic-long", "doc-pl-multitopic-long", "doc-en-distractor-water", "doc-pl-distractor-weather"]
+    },
+    {
+      "id": "query-pl-rainwater-paraphrase",
+      "coverage": "polish",
+      "language": "pl",
+      "kind": "paraphrase",
+      "text": "Jak wykorzystać opady z balkonu do nawadniania roślin i zabezpieczyć budynek?",
+      "relevant_document_ids": ["doc-pl-rainwater-source", "doc-pl-rainwater-summary", "doc-pl-multitopic-long"],
+      "non_relevant_document_ids": ["doc-en-rainwater-source", "doc-en-rainwater-summary", "doc-en-bike-source", "doc-pl-bike-source", "doc-en-bread-source", "doc-pl-library-source", "doc-en-multitopic-long", "doc-en-distractor-water", "doc-pl-distractor-weather"]
+    },
+    {
+      "id": "query-pl-bike-paraphrase",
+      "coverage": "polish",
+      "language": "pl",
+      "kind": "paraphrase",
+      "text": "Co zrobić z hamulcami, oponami i napędem przed zimową jazdą?",
+      "relevant_document_ids": ["doc-pl-bike-source", "doc-pl-multitopic-long"],
+      "non_relevant_document_ids": ["doc-en-rainwater-source", "doc-en-rainwater-summary", "doc-pl-rainwater-source", "doc-pl-rainwater-summary", "doc-en-bike-source", "doc-en-bread-source", "doc-pl-library-source", "doc-en-multitopic-long", "doc-en-distractor-water", "doc-pl-distractor-weather"]
+    },
+    {
+      "id": "query-pl-summary",
+      "coverage": "polish",
+      "language": "pl",
+      "kind": "summary",
+      "text": "Znajdź krótkie podsumowanie zasad używania deszczówki.",
+      "relevant_document_ids": ["doc-pl-rainwater-summary"],
+      "non_relevant_document_ids": ["doc-en-rainwater-source", "doc-en-rainwater-summary", "doc-pl-rainwater-source", "doc-en-bike-source", "doc-pl-bike-source", "doc-en-bread-source", "doc-pl-library-source", "doc-en-multitopic-long", "doc-pl-multitopic-long", "doc-en-distractor-water", "doc-pl-distractor-weather"]
+    },
+    {
+      "id": "query-en-to-pl-rainwater",
+      "coverage": "cross_language",
+      "language": "en",
+      "kind": "cross_language_paraphrase",
+      "text": "Which Polish notes explain collecting rain from a canopy to water herbs?",
+      "relevant_document_ids": ["doc-pl-rainwater-source", "doc-pl-rainwater-summary", "doc-pl-multitopic-long"],
+      "non_relevant_document_ids": ["doc-en-rainwater-source", "doc-en-rainwater-summary", "doc-en-bike-source", "doc-pl-bike-source", "doc-en-bread-source", "doc-pl-library-source", "doc-en-multitopic-long", "doc-en-distractor-water", "doc-pl-distractor-weather"]
+    },
+    {
+      "id": "query-pl-to-en-bike",
+      "coverage": "cross_language",
+      "language": "pl",
+      "kind": "cross_language_paraphrase",
+      "text": "Które angielskie notatki opisują przygotowanie roweru na słone zimowe drogi?",
+      "relevant_document_ids": ["doc-en-bike-source", "doc-en-multitopic-long"],
+      "non_relevant_document_ids": ["doc-en-rainwater-source", "doc-en-rainwater-summary", "doc-pl-rainwater-source", "doc-pl-rainwater-summary", "doc-pl-bike-source", "doc-en-bread-source", "doc-pl-library-source", "doc-pl-multitopic-long", "doc-en-distractor-water", "doc-pl-distractor-weather"]
+    },
+    {
+      "id": "query-pl-to-en-bread",
+      "coverage": "cross_language",
+      "language": "pl",
+      "kind": "cross_language_paraphrase",
+      "text": "Znajdź angielski harmonogram przygotowania chleba na zakwasie przez noc.",
+      "relevant_document_ids": ["doc-en-bread-source", "doc-en-multitopic-long"],
+      "non_relevant_document_ids": ["doc-en-rainwater-source", "doc-en-rainwater-summary", "doc-pl-rainwater-source", "doc-pl-rainwater-summary", "doc-en-bike-source", "doc-pl-bike-source", "doc-pl-library-source", "doc-pl-multitopic-long", "doc-en-distractor-water", "doc-pl-distractor-weather"]
+    }
+  ]
+}

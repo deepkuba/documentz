@@ -1,0 +1,39 @@
+# Multilingual relevance fixtures
+
+`multilingual.json` is a synthetic, non-sensitive benchmark corpus for E00. It
+contains English and Polish sources, concise summaries, close lexical
+distractors, paraphrased queries, cross-language queries, and long documents
+that deliberately mix several topics.
+
+Every query exhaustively partitions all document IDs into
+`relevant_document_ids` and `non_relevant_document_ids`. There are no implicit
+or unjudged documents, so a benchmark run cannot silently choose how to treat a
+missing judgment.
+
+## Scoring a run
+
+Create a UTF-8 JSON object whose keys are every query ID and whose values are
+document IDs in descending retrieval order:
+
+```json
+{
+  "query-en-rainwater-paraphrase": [
+    "doc-en-rainwater-source",
+    "doc-en-rainwater-summary"
+  ]
+}
+```
+
+The real file must contain all nine query keys. A ranking may be shorter than
+the corpus, but duplicate or unknown document IDs are rejected. Score it with:
+
+```sh
+python3 -m tools.relevance_fixtures \
+  tests/fixtures/relevance/multilingual.json \
+  path/to/rankings.json \
+  --cutoff 3
+```
+
+The scorer reports per-query recall, precision, reciprocal rank, and explicit
+non-relevant hits, plus deterministic macro averages rounded to six decimal
+places. Query order always follows the versioned fixture file.
