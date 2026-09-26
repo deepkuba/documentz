@@ -1,6 +1,8 @@
 # Development bootstrap
 
-Foundation versions are pinned in [`toolchain.toml`](./toolchain.toml). F02 and F03 will add the Python and Portal manifests and their generated lockfiles; once those files exist, a clean checkout is bootstrapped as follows.
+Foundation versions are pinned in [`toolchain.toml`](./toolchain.toml). The Python
+manifest and generated lockfile are committed; F03 will add the Portal manifest
+and lockfile. A clean checkout is bootstrapped as follows.
 
 ## Python workspace
 
@@ -22,10 +24,18 @@ tar --extract --gzip --file .tools/downloads/uv.tar.gz \
 export PATH="$PWD/.tools/uv-0.12.19:$PATH"
 uv --version                 # must report uv 0.12.19
 uv python install 3.14.7
-uv sync --frozen
+uv sync --frozen --all-packages
 ```
 
-`uv sync --frozen` must consume the checked-in `uv.lock`; it must not resolve or modify dependencies in CI or deployment.
+`uv sync --frozen --all-packages` consumes the checked-in `uv.lock`; it must not resolve or modify dependencies in CI or deployment. The checkout-local Python workspace commands are:
+
+```sh
+make python_workspace_smoke
+make format-check
+make lint
+make type-check
+make unit-test
+```
 
 ## Portal workspace
 
@@ -59,7 +69,8 @@ platform recipes without changing the pinned runtime versions.
 
 ## Canonical checks
 
-F02 and F03 will bind these stable repository operations to executable commands without changing their names or meanings:
+F02 binds the Python operations below as Make targets. F03 will add the Portal
+operations without changing these names or meanings:
 
 ```text
 format-check
