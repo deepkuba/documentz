@@ -14,7 +14,8 @@ REQUIRED_QUERY_KINDS = {
     "paraphrase",
     "summary",
     "cross_language_paraphrase",
-    "late_passage_overlap",
+    "late_passage",
+    "boundary_overlap",
 }
 
 
@@ -60,7 +61,7 @@ def load_fixture_set(path: Path) -> dict[str, Any]:
                 raise ValueError(
                     f"cross-language query {query['id']} must target the other language"
                 )
-        if query.get("kind") == "late_passage_overlap":
+        if query.get("kind") in {"late_passage", "boundary_overlap"}:
             _validate_passage_expectation(query, relevant, non_relevant, documents_by_id)
 
     if not query_ids:
@@ -87,23 +88,30 @@ def _validate_passage_expectation(
     right = expectation.get("boundary_right")
     minimum = expectation.get("minimum_utf8_offset")
     boundary = expectation.get("boundary_after_utf8_byte")
-    if not all(isinstance(value, str) and value for value in (evidence, left, right)):
-        raise ValueError(f"late-passage query {query['id']} has invalid sentinel text")
-    if not isinstance(minimum, int) or not isinstance(boundary, int):
+    if not isinstance(minimum, int):
         raise ValueError(f"late-passage query {query['id']} has invalid byte offsets")
-    if content.count(evidence) != 1:
-        raise ValueError(f"late-passage query {query['id']} evidence must occur exactly once")
-    evidence_offset = len(content[: content.index(evidence)].encode("utf-8"))
-    if evidence_offset < minimum:
-        raise ValueError(f"late-passage query {query['id']} evidence is too early")
+    if query["kind"] == "late_passage":
+        if not isinstance(evidence, str) or not evidence or content.count(evidence) != 1:
+            raise ValueError(f"late-passage query {query['id']} evidence must occur exactly once")
+        evidence_offset = len(content[: content.index(evidence)].encode("utf-8"))
+        if evidence_offset < minimum:
+            raise ValueError(f"late-passage query {query['id']} evidence is too early")
+        if any(evidence in documents_by_id[document_id]["content"] for document_id in non_relevant):
+            raise ValueError(f"late-passage query {query['id']} evidence leaks into a distractor")
+        return
+
+    if not all(isinstance(value, str) and value for value in (left, right)):
+        raise ValueError(f"boundary query {query['id']} has invalid probe text")
+    if not isinstance(boundary, int) or expectation.get("requires_boundary_evidence") is not True:
+        raise ValueError(f"boundary query {query['id']} lacks passage-level acceptance")
     probe = left + right
     if content.count(probe) != 1:
         raise ValueError(f"late-passage query {query['id']} boundary probe must occur once")
     actual_boundary = len(content[: content.index(probe) + len(left)].encode("utf-8"))
     if actual_boundary != boundary or boundary < minimum:
         raise ValueError(f"late-passage query {query['id']} boundary offset is inconsistent")
-    if any(evidence in documents_by_id[document_id]["content"] for document_id in non_relevant):
-        raise ValueError(f"late-passage query {query['id']} evidence leaks into a distractor")
+    if any(probe in documents_by_id[document_id]["content"] for document_id in non_relevant):
+        raise ValueError(f"boundary query {query['id']} probe leaks into a distractor")
 
 
 def score_rankings(

@@ -25,7 +25,7 @@ class RelevanceFixtureTests(unittest.TestCase):
 
         self.assertTrue({"source", "summary", "distractor", "multi_topic_long_document"} <= roles)
         self.assertTrue(
-            {"paraphrase", "summary", "cross_language_paraphrase", "late_passage_overlap"}
+            {"paraphrase", "summary", "cross_language_paraphrase", "late_passage", "boundary_overlap"}
             <= query_kinds
         )
         long_documents = [
@@ -37,12 +37,20 @@ class RelevanceFixtureTests(unittest.TestCase):
         self.assertTrue(
             all(4096 <= len(document["content"].encode("utf-8")) <= 16 * 1024 for document in long_documents)
         )
-        late_queries = [
-            query for query in fixture_set["queries"] if query["kind"] == "late_passage_overlap"
+        late_queries = [query for query in fixture_set["queries"] if query["kind"] == "late_passage"]
+        boundary_queries = [
+            query for query in fixture_set["queries"] if query["kind"] == "boundary_overlap"
         ]
         self.assertEqual({query["language"] for query in late_queries}, {"en", "pl"})
+        self.assertEqual({query["language"] for query in boundary_queries}, {"en", "pl"})
         self.assertTrue(
             all(query["passage_expectation"]["minimum_utf8_offset"] >= 4096 for query in late_queries)
+        )
+        self.assertTrue(
+            all(
+                query["passage_expectation"]["requires_boundary_evidence"] is True
+                for query in boundary_queries
+            )
         )
 
     def test_identical_rankings_produce_identical_scores(self) -> None:
@@ -57,10 +65,10 @@ class RelevanceFixtureTests(unittest.TestCase):
 
         self.assertEqual(first_score, second_score)
         self.assertEqual(first_score["macro_recall_at_k"], 1.0)
-        self.assertEqual(first_score["macro_precision_at_k"], 0.636364)
+        self.assertEqual(first_score["macro_precision_at_k"], 0.589744)
         self.assertEqual(first_score["mean_reciprocal_rank"], 1.0)
-        self.assertEqual(first_score["mean_non_relevant_hits_at_k"], 1.090909)
-        self.assertEqual(first_score["query_count"], 11)
+        self.assertEqual(first_score["mean_non_relevant_hits_at_k"], 1.230769)
+        self.assertEqual(first_score["query_count"], 13)
 
     def test_scorer_rejects_unjudged_output(self) -> None:
         fixture_set = load_fixture_set(FIXTURE_PATH)

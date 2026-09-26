@@ -171,24 +171,44 @@
       "non_relevant_document_ids": ["doc-en-rainwater-source", "doc-en-rainwater-summary", "doc-pl-rainwater-source", "doc-pl-rainwater-summary", "doc-en-bike-source", "doc-pl-bike-source", "doc-pl-library-source", "doc-pl-multitopic-long", "doc-en-distractor-water", "doc-pl-distractor-weather"]
     },
     {
-      "id": "query-en-late-passage-overlap",
+      "id": "query-en-late-passage",
       "coverage": "english",
       "language": "en",
-      "kind": "late_passage_overlap",
-      "text": "Where is the cobalt badge, and what copper lantern protocol is recorded?",
+      "kind": "late_passage",
+      "text": "Where is the cobalt badge stored?",
       "relevant_document_ids": ["doc-en-multitopic-long"],
       "non_relevant_document_ids": ["doc-en-rainwater-source", "doc-en-rainwater-summary", "doc-pl-rainwater-source", "doc-pl-rainwater-summary", "doc-en-bike-source", "doc-pl-bike-source", "doc-en-bread-source", "doc-pl-library-source", "doc-pl-multitopic-long", "doc-en-distractor-water", "doc-pl-distractor-weather"],
-      "passage_expectation": {"evidence_text":"cobalt badge","minimum_utf8_offset":4096,"boundary_left":"copper lantern","boundary_right":" protocol","boundary_after_utf8_byte":5347}
+      "passage_expectation": {"evidence_text":"cobalt badge","minimum_utf8_offset":4096}
     },
     {
-      "id": "query-pl-late-passage-overlap",
+      "id": "query-pl-late-passage",
       "coverage": "polish",
       "language": "pl",
-      "kind": "late_passage_overlap",
-      "text": "Gdzie jest kobaltowa plakietka i jaki protokół bursztynowej latarni zapisano?",
+      "kind": "late_passage",
+      "text": "Gdzie leży kobaltowa plakietka?",
       "relevant_document_ids": ["doc-pl-multitopic-long"],
       "non_relevant_document_ids": ["doc-en-rainwater-source", "doc-en-rainwater-summary", "doc-pl-rainwater-source", "doc-pl-rainwater-summary", "doc-en-bike-source", "doc-pl-bike-source", "doc-en-bread-source", "doc-pl-library-source", "doc-en-multitopic-long", "doc-en-distractor-water", "doc-pl-distractor-weather"],
-      "passage_expectation": {"evidence_text":"kobaltowa plakietka","minimum_utf8_offset":4096,"boundary_left":"protokół bursztynowej","boundary_right":" latarni","boundary_after_utf8_byte":4586}
+      "passage_expectation": {"evidence_text":"kobaltowa plakietka","minimum_utf8_offset":4096}
+    },
+    {
+      "id": "query-en-boundary-overlap",
+      "coverage": "english",
+      "language": "en",
+      "kind": "boundary_overlap",
+      "text": "What copper lantern protocol is recorded?",
+      "relevant_document_ids": ["doc-en-multitopic-long"],
+      "non_relevant_document_ids": ["doc-en-rainwater-source", "doc-en-rainwater-summary", "doc-pl-rainwater-source", "doc-pl-rainwater-summary", "doc-en-bike-source", "doc-pl-bike-source", "doc-en-bread-source", "doc-pl-library-source", "doc-pl-multitopic-long", "doc-en-distractor-water", "doc-pl-distractor-weather"],
+      "passage_expectation": {"minimum_utf8_offset":4096,"boundary_left":"copper lantern","boundary_right":" protocol","boundary_after_utf8_byte":5347,"requires_boundary_evidence":true}
+    },
+    {
+      "id": "query-pl-boundary-overlap",
+      "coverage": "polish",
+      "language": "pl",
+      "kind": "boundary_overlap",
+      "text": "Jaki protokół bursztynowej latarni zapisano?",
+      "relevant_document_ids": ["doc-pl-multitopic-long"],
+      "non_relevant_document_ids": ["doc-en-rainwater-source", "doc-en-rainwater-summary", "doc-pl-rainwater-source", "doc-pl-rainwater-summary", "doc-en-bike-source", "doc-pl-bike-source", "doc-en-bread-source", "doc-pl-library-source", "doc-en-multitopic-long", "doc-en-distractor-water", "doc-pl-distractor-weather"],
+      "passage_expectation": {"minimum_utf8_offset":4096,"boundary_left":"protokół bursztynowej","boundary_right":" latarni","boundary_after_utf8_byte":4586,"requires_boundary_evidence":true}
     }
   ]
 }
