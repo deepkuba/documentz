@@ -1,9 +1,8 @@
 """Structural and secret-safety checks for the production inventory."""
 
-from pathlib import Path
 import re
 import unittest
-
+from pathlib import Path
 
 ROOT = Path(__file__).parents[2]
 INVENTORY = ROOT / "docs" / "operations" / "production-inventory.md"
@@ -68,7 +67,9 @@ class ProductionInventoryTest(unittest.TestCase):
 
         for item in REQUIRED_ITEMS:
             row = re.search(
-                rf"<!-- inventory:{item} -->\n\| .*? \| `(confirmed|owner-required|dependent-task)` \| .*? \| .*? \| .*? \| .*? \|",
+                rf"<!-- inventory:{item} -->\n\| .*? \| "
+                r"`(confirmed|owner-required|dependent-task)` \| "
+                r".*? \| .*? \| .*? \| .*? \|",
                 text,
             )
             self.assertIsNotNone(row, f"{item} lacks the complete inventory row")

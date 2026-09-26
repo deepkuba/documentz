@@ -4,9 +4,9 @@ from __future__ import annotations
 
 import argparse
 import json
+from collections.abc import Mapping, Sequence
 from pathlib import Path
-from typing import Any, Mapping, Sequence
-
+from typing import Any, cast
 
 REQUIRED_COVERAGE = {"english", "polish", "cross_language"}
 REQUIRED_ROLES = {"source", "summary", "distractor", "multi_topic_long_document"}
@@ -22,7 +22,7 @@ REQUIRED_QUERY_KINDS = {
 def load_fixture_set(path: Path) -> dict[str, Any]:
     """Load a fixture file and reject ambiguous or incomplete judgments."""
 
-    fixture_set = json.loads(path.read_text(encoding="utf-8"))
+    fixture_set = cast(dict[str, Any], json.loads(path.read_text(encoding="utf-8")))
     documents = fixture_set.get("documents", [])
     queries = fixture_set.get("queries", [])
     document_ids = _unique_ids(documents, "document")
@@ -44,9 +44,7 @@ def load_fixture_set(path: Path) -> dict[str, Any]:
 
     for query in queries:
         relevant = _id_set(query.get("relevant_document_ids"), query["id"], "relevant")
-        non_relevant = _id_set(
-            query.get("non_relevant_document_ids"), query["id"], "non-relevant"
-        )
+        non_relevant = _id_set(query.get("non_relevant_document_ids"), query["id"], "non-relevant")
         if not relevant:
             raise ValueError(f"query {query['id']} has no relevant documents")
         if relevant & non_relevant:
@@ -56,7 +54,9 @@ def load_fixture_set(path: Path) -> dict[str, Any]:
         if query.get("language") not in {"en", "pl"}:
             raise ValueError(f"query {query['id']} has an unsupported language")
         if query.get("coverage") == "cross_language":
-            source_languages = {documents_by_id[document_id]["language"] for document_id in relevant}
+            source_languages = {
+                documents_by_id[document_id]["language"] for document_id in relevant
+            }
             if query["language"] in source_languages or len(source_languages) != 1:
                 raise ValueError(
                     f"cross-language query {query['id']} must target the other language"
@@ -100,7 +100,7 @@ def _validate_passage_expectation(
             raise ValueError(f"late-passage query {query['id']} evidence leaks into a distractor")
         return
 
-    if not all(isinstance(value, str) and value for value in (left, right)):
+    if not isinstance(left, str) or not left or not isinstance(right, str) or not right:
         raise ValueError(f"boundary query {query['id']} has invalid probe text")
     if not isinstance(boundary, int) or expectation.get("requires_boundary_evidence") is not True:
         raise ValueError(f"boundary query {query['id']} lacks passage-level acceptance")
@@ -137,9 +137,7 @@ def score_rankings(
         if len(ranked_ids) != len(set(ranked_ids)):
             raise ValueError(f"query {query_id} ranks a document more than once")
 
-        judged_ids = set(query["relevant_document_ids"]) | set(
-            query["non_relevant_document_ids"]
-        )
+        judged_ids = set(query["relevant_document_ids"]) | set(query["non_relevant_document_ids"])
         unknown_ids = set(ranked_ids) - judged_ids
         if unknown_ids:
             raise ValueError(
@@ -183,9 +181,10 @@ def score_rankings(
 
 
 def _unique_ids(records: Sequence[Mapping[str, Any]], record_name: str) -> set[str]:
-    ids = [record.get("id") for record in records]
-    if any(not isinstance(record_id, str) or not record_id for record_id in ids):
+    raw_ids = [record.get("id") for record in records]
+    if any(not isinstance(record_id, str) or not record_id for record_id in raw_ids):
         raise ValueError(f"every {record_name} must have a non-empty string id")
+    ids = cast(list[str], raw_ids)
     if len(ids) != len(set(ids)):
         raise ValueError(f"duplicate {record_name} id")
     return set(ids)
@@ -200,7 +199,7 @@ def _id_set(value: Any, query_id: str, judgment: str) -> set[str]:
 
 
 def _mean(results: Sequence[Mapping[str, Any]], key: str) -> float:
-    return round(sum(result[key] for result in results) / len(results), 6)
+    return round(sum(float(result[key]) for result in results) / len(results), 6)
 
 
 def main() -> None:

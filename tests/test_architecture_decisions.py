@@ -2,7 +2,6 @@ import re
 import unittest
 from pathlib import Path
 
-
 ROOT = Path(__file__).parents[1]
 
 
@@ -30,11 +29,22 @@ class ArchitectureDecisionTests(unittest.TestCase):
             for name in names:
                 table = rf"\[{section}\.{name}\](.*?)(?=\n\[|\Z)"
                 match = re.search(table, manifest, re.DOTALL)
-                self.assertIsNotNone(match, f"missing choice {section}.{name}")
+                if match is None:
+                    self.fail(f"missing choice {section}.{name}")
                 choice = match.group(1)
-                self.assertRegex(choice, r'(?m)^name = "[^"]+"$', f"{section}.{name} must name a tool")
-                self.assertRegex(choice, r'(?m)^version = "\d+\.\d+\.\d+"$', f"{section}.{name} must be exactly pinned")
-                self.assertRegex(choice, r'(?m)^evidence = "https://[^"]+"$', f"{section}.{name} needs compatibility evidence")
+                self.assertRegex(
+                    choice, r'(?m)^name = "[^"]+"$', f"{section}.{name} must name a tool"
+                )
+                self.assertRegex(
+                    choice,
+                    r'(?m)^version = "\d+\.\d+\.\d+"$',
+                    f"{section}.{name} must be exactly pinned",
+                )
+                self.assertRegex(
+                    choice,
+                    r'(?m)^evidence = "https://[^"]+"$',
+                    f"{section}.{name} needs compatibility evidence",
+                )
 
         bootstrap_path = ROOT / "BOOTSTRAP.md"
         self.assertTrue(bootstrap_path.is_file(), "BOOTSTRAP.md must define clean-checkout setup")
@@ -57,7 +67,8 @@ class ArchitectureDecisionTests(unittest.TestCase):
 
         plan = (ROOT / "IMPLEMENTATION_PLAN.md").read_text(encoding="utf-8")
         self.assertIn(
-            "- [x] Select and record the OAuth library, PostgreSQL job library, and frontend build stack in short ADRs.",
+            "- [x] Select and record the OAuth library, PostgreSQL job library, and "
+            "frontend build stack in short ADRs.",
             plan,
         )
 

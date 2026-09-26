@@ -1,11 +1,10 @@
 """Completeness checks for the framework-neutral public contract examples."""
 
 import json
-from collections import Counter
-from pathlib import Path
 import re
 import unittest
-
+from collections import Counter
+from pathlib import Path
 
 ROOT = Path(__file__).parents[2]
 EXAMPLES = ROOT / "docs" / "public-contract-examples.md"
