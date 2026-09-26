@@ -5,7 +5,6 @@ import subprocess
 import unittest
 from pathlib import Path
 
-
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 COMPOSE_FILE = REPOSITORY_ROOT / "compose.yaml"
 
@@ -54,18 +53,13 @@ class PostgresPgvectorSmokeTests(unittest.TestCase):
         self.assertEqual(test["networks"], {"database-test": None})
         self.assertIn("postgres-development-data", config["volumes"])
         self.assertFalse(
-            any(
-                mount["target"] == "/var/lib/postgresql/data"
-                for mount in test.get("volumes", [])
-            )
+            any(mount["target"] == "/var/lib/postgresql/data" for mount in test.get("volumes", []))
         )
         self.assertEqual(
             test["tmpfs"][0],
             "/var/lib/postgresql/data:rw,noexec,nosuid,size=512m,mode=0700",
         )
-        self.assertNotEqual(
-            development["secrets"][0]["source"], test["secrets"][0]["source"]
-        )
+        self.assertNotEqual(development["secrets"][0]["source"], test["secrets"][0]["source"])
 
         init_sql = REPOSITORY_ROOT / "deploy/postgres/init/001-enable-vector.sql"
         self.assertEqual(
@@ -84,9 +78,7 @@ class PostgresPgvectorSmokeTests(unittest.TestCase):
         }
         self.assertEqual(assignments["revision"], "0001_empty_foundation")
         self.assertIsNone(assignments["down_revision"])
-        alembic_env = (REPOSITORY_ROOT / "migrations/env.py").read_text(
-            encoding="utf-8"
-        )
+        alembic_env = (REPOSITORY_ROOT / "migrations/env.py").read_text(encoding="utf-8")
         self.assertIn('os.environ.get("DOCUMENTZ_DATABASE_URL")', alembic_env)
         self.assertNotIn("postgresql://", alembic_env)
         smoke_script = REPOSITORY_ROOT / "scripts/postgres_pgvector_smoke.sh"
