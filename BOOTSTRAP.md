@@ -1,8 +1,8 @@
 # Development bootstrap
 
 Foundation versions are pinned in [`toolchain.toml`](./toolchain.toml). The Python
-manifest and generated lockfile are committed; F03 will add the Portal manifest
-and lockfile. A clean checkout is bootstrapped as follows.
+and Portal manifests and generated lockfiles are committed; a clean checkout is
+bootstrapped as follows.
 
 ## Python workspace
 
@@ -64,13 +64,13 @@ pnpm install --frozen-lockfile
 `pnpm install --frozen-lockfile` must consume the checked-in `pnpm-lock.yaml`. Dependency updates are explicit reviewable changes to a manifest and lockfile, never an implicit bootstrap side effect.
 
 Other CPU architectures require the matching official artifact and checksum and
-are not yet a supported bootstrap target; F02/F03 may add separately verified
-platform recipes without changing the pinned runtime versions.
+are not yet a supported bootstrap target. Future separately verified platform
+recipes must not change the pinned runtime versions.
 
 ## Canonical checks
 
-F02 binds the Python operations below as Make targets. F03 will add the Portal
-operations without changing these names or meanings:
+F02 binds the Python operations below as Make targets. F03 exposes the Portal
+operations as root package scripts without changing these names or meanings:
 
 ```text
 format-check
