@@ -1,0 +1,17 @@
+{
+  "name": "documentz",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@12.5.1",
+  "engines": {
+    "node": "24.21.0",
+    "pnpm": "12.5.1"
+  },
+  "scripts": {
+    "format-check": "pnpm --filter @documentz/portal format-check",
+    "lint": "pnpm --filter @documentz/portal-lint lint",
+    "type-check": "pnpm --filter @documentz/portal type-check",
+    "portal-test": "pnpm --filter @documentz/portal test",
+    "portal-build": "pnpm --filter @documentz/portal build"
+  }
+}

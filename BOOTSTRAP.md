@@ -78,4 +78,11 @@ lint
 type-check
 unit-test
 portal-test
+portal-build
 ```
+
+The Portal commands are exposed as root package scripts. TypeScript 7.0.2 is the
+application compiler. Because typescript-eslint does not yet consume the
+TypeScript 7 compiler API, the isolated `tools/portal-lint` workspace supplies
+TypeScript 6.0.3 only to ESLint; it does not compile Portal source or relax the
+pinned application toolchain.
