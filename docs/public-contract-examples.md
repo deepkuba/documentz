@@ -523,6 +523,19 @@ Write results preserve the same idempotency behavior as HTTP.
 {"error":{"code":"conflict","message":"The resource changed since the supplied version.","request_id":"req_01J9Y70V6D4K","details":{"expected_revision":3}}}
 ```
 
+<!-- example:mcp:archive_project:request -->
+```json
+{"project_id":"prj_01J9Y6F3K2A1","expected_revision":4,"idempotency_key":"idem-project-003"}
+```
+<!-- example:mcp:archive_project:success -->
+```json
+{"project_id":"prj_01J9Y6F3K2A1","name":"Documentz PoC","description":"Production PoC context","archived":true,"revision":5}
+```
+<!-- example:mcp:archive_project:error -->
+```json
+{"error":{"code":"conflict","message":"The resource changed since the supplied version.","request_id":"req_01J9Y70V6D4K","details":{"expected_revision":4}}}
+```
+
 ### Context and snapshot tools
 
 <!-- example:mcp:list_contexts:request -->
@@ -745,5 +758,6 @@ MCP completes that request through `store_context` with this input variant:
 - HTTP and MCP examples intentionally share field names, result shapes, and error
   codes. Transport-only differences are headers/ETags versus explicit MCP input
   fields, MCP's `content_trust` marker, and MCP's outer `CallToolResult.isError`.
-  Project archival is an HTTP owner operation; `update_project` cannot change the
+  Project archival is the same one-way `projects:write` transition through HTTP
+  `archive-project` and MCP `archive_project`; `update_project` cannot change the
   `archived` field.

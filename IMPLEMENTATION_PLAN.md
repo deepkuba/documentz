@@ -207,7 +207,7 @@ The exact Python packaging tool, React build tool, OAuth library, and PostgreSQL
 **First failing contract test:** an unauthenticated MCP request receives the protocol-required HTTP authorization challenge rather than a tool-level authorization error.
 
 - [ ] Implement Streamable HTTP MCP with protocol-version negotiation at `/d/mcp`.
-- [ ] Expose project tools: `list_projects`, `create_project`, and `update_project`.
+- [ ] Expose project tools: `list_projects`, `create_project`, `update_project`, and `archive_project`.
 - [ ] Expose document tools: `list_contexts`, `store_context`, `get_context`, `update_context`, `change_context_lifecycle`, `list_document_snapshots`, and `get_document_snapshot`.
 - [ ] Use explicit project IDs, named projections, cursor pagination, expected snapshots/states, and idempotency keys.
 - [ ] Map MCP failures to the same stable domain errors as HTTP.

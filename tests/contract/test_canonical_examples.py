@@ -1,6 +1,7 @@
 """Completeness checks for the framework-neutral public contract examples."""
 
 import json
+from collections import Counter
 from pathlib import Path
 import re
 import unittest
@@ -36,6 +37,7 @@ MCP_TOOLS = {
     "list_projects",
     "create_project",
     "update_project",
+    "archive_project",
     "list_contexts",
     "store_context",
     "get_context",
@@ -59,9 +61,19 @@ class CanonicalContractExamplesTest(unittest.TestCase):
         text = EXAMPLES.read_text(encoding="utf-8")
 
         for interface, planned in (("http", HTTP_OPERATIONS), ("mcp", MCP_TOOLS)):
-            found = set(
-                re.findall(rf"<!-- example:{interface}:([a-z0-9_-]+):(request|success|error) -->", text)
+            markers = re.findall(
+                rf"<!-- example:{interface}:([a-z0-9_-]+):(request|success|error) -->", text
             )
+            counts = Counter(markers)
+            expected = {
+                (operation, example_kind)
+                for operation in planned
+                for example_kind in ("request", "success", "error")
+            }
+            self.assertEqual(expected, set(counts), f"unexpected {interface} canonical markers")
+            duplicates = sorted(marker for marker, count in counts.items() if count != 1)
+            self.assertFalse(duplicates, f"duplicate {interface} canonical markers: {duplicates}")
+            found = set(markers)
             missing = {
                 (operation, example_kind)
                 for operation in planned
@@ -69,6 +81,19 @@ class CanonicalContractExamplesTest(unittest.TestCase):
                 if (operation, example_kind) not in found
             }
             self.assertFalse(missing, f"missing {interface} canonical examples: {sorted(missing)}")
+
+        blocks = re.findall(
+            r"<!-- example:(http|mcp):([a-z0-9_-]+):(request|success|error) -->\n"
+            r"(.*?)(?=\n<!-- example:|\n### |\n## |\Z)",
+            text,
+            flags=re.DOTALL,
+        )
+        self.assertEqual(3 * (len(HTTP_OPERATIONS) + len(MCP_TOOLS)), len(blocks))
+        for interface, operation, kind, body in blocks:
+            self.assertTrue(
+                body.lstrip().startswith("`"),
+                f"{interface}:{operation}:{kind} is disconnected from its example",
+            )
 
         for required_section in (
             "## Contract conventions",

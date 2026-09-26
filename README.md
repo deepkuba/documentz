@@ -149,7 +149,7 @@ A separate search cluster would add operational cost before it solves a demonstr
 
 The remote MCP server uses Streamable HTTP and OAuth. Its planned tools cover:
 
-- project listing, creation, and updates;
+- project listing, creation, updates, and archival;
 - document storage, listing, retrieval, and editing;
 - lexical, semantic, and hybrid search;
 - lifecycle changes except permanent purge;
