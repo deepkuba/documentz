@@ -1,6 +1,8 @@
 # Development bootstrap
 
-Foundation versions are pinned in [`toolchain.toml`](./toolchain.toml). F02 and F03 will add the Python and Portal manifests and their generated lockfiles; once those files exist, a clean checkout is bootstrapped as follows.
+Foundation versions are pinned in [`toolchain.toml`](./toolchain.toml). The Python
+and Portal manifests and generated lockfiles are committed; a clean checkout is
+bootstrapped as follows.
 
 ## Python workspace
 
@@ -67,7 +69,8 @@ platform recipes without changing the pinned runtime versions.
 
 ## Canonical checks
 
-F02 binds the Python operations below as Make targets. F03 will add the Portal target without changing these names or meanings:
+F02 binds the Python operations below as Make targets. F03 exposes the Portal
+operations as root package scripts without changing these names or meanings:
 
 ```text
 format-check
