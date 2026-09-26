@@ -24,7 +24,10 @@ class RelevanceFixtureTests(unittest.TestCase):
         query_kinds = {query["kind"] for query in fixture_set["queries"]}
 
         self.assertTrue({"source", "summary", "distractor", "multi_topic_long_document"} <= roles)
-        self.assertTrue({"paraphrase", "summary", "cross_language_paraphrase"} <= query_kinds)
+        self.assertTrue(
+            {"paraphrase", "summary", "cross_language_paraphrase", "late_passage_overlap"}
+            <= query_kinds
+        )
         long_documents = [
             document
             for document in fixture_set["documents"]
@@ -33,6 +36,13 @@ class RelevanceFixtureTests(unittest.TestCase):
         self.assertEqual({document["language"] for document in long_documents}, {"en", "pl"})
         self.assertTrue(
             all(4096 <= len(document["content"].encode("utf-8")) <= 16 * 1024 for document in long_documents)
+        )
+        late_queries = [
+            query for query in fixture_set["queries"] if query["kind"] == "late_passage_overlap"
+        ]
+        self.assertEqual({query["language"] for query in late_queries}, {"en", "pl"})
+        self.assertTrue(
+            all(query["passage_expectation"]["minimum_utf8_offset"] >= 4096 for query in late_queries)
         )
 
     def test_identical_rankings_produce_identical_scores(self) -> None:
@@ -47,10 +57,10 @@ class RelevanceFixtureTests(unittest.TestCase):
 
         self.assertEqual(first_score, second_score)
         self.assertEqual(first_score["macro_recall_at_k"], 1.0)
-        self.assertEqual(first_score["macro_precision_at_k"], 0.703704)
+        self.assertEqual(first_score["macro_precision_at_k"], 0.636364)
         self.assertEqual(first_score["mean_reciprocal_rank"], 1.0)
-        self.assertEqual(first_score["mean_non_relevant_hits_at_k"], 0.888889)
-        self.assertEqual(first_score["query_count"], 9)
+        self.assertEqual(first_score["mean_non_relevant_hits_at_k"], 1.090909)
+        self.assertEqual(first_score["query_count"], 11)
 
     def test_scorer_rejects_unjudged_output(self) -> None:
         fixture_set = load_fixture_set(FIXTURE_PATH)
