@@ -165,6 +165,9 @@ A future `recreate_context` orchestration tool is intentionally deferred. The Po
 
 The public API is versioned under `/d/api/v1/` and documented through OpenAPI. HTTP and MCP are adapters over the same application services, so neither receives privileged lifecycle or authorization behavior.
 
+Framework-neutral HTTP and MCP payloads are maintained in
+[the canonical public contract examples](./docs/public-contract-examples.md).
+
 The API uses:
 
 - opaque cursor pagination;

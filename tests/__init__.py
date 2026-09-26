@@ -1,1 +1,1 @@
-"""Repository acceptance checks."""
+"""Documentz test suites."""
