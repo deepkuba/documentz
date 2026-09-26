@@ -1,0 +1,6 @@
+"""Framework-free domain package."""
+
+
+def package_identity() -> str:
+    """Return the installable package identity for foundation smoke checks."""
+    return "documentz-domain"

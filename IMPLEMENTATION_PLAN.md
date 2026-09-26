@@ -90,7 +90,7 @@ The exact Python packaging tool, React build tool, OAuth library, and PostgreSQL
 
 **First failing test:** a configuration test rejects startup when the canonical external base URL is absent or invalid.
 
-- [ ] Create the Python workspace, dependency lockfile, formatting, linting, type checking, and pytest configuration.
+- [x] Create the Python workspace, dependency lockfile, formatting, linting, type checking, and pytest configuration.
 - [ ] Create the React/TypeScript Portal workspace with formatting, linting, type checking, and component-test configuration.
 - [ ] Add PostgreSQL/pgvector test infrastructure and Alembic.
 - [ ] Add Docker Compose profiles for development, tests, and production-like local execution.

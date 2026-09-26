@@ -1,0 +1,22 @@
+[project]
+name = "documentz-api"
+version = "0.1.0"
+requires-python = "==3.14.*"
+dependencies = [
+    "Authlib==1.8.0",
+    "documentz-application",
+    "documentz-infrastructure",
+    "fastapi==0.141.1",
+    "pydantic-settings==2.15.0",
+]
+
+[build-system]
+requires = ["hatchling==1.32.4"]
+build-backend = "hatchling.build"
+
+[tool.uv.sources]
+documentz-application = { workspace = true }
+documentz-infrastructure = { workspace = true }
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/documentz_api"]
