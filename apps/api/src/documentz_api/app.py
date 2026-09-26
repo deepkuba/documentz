@@ -14,7 +14,7 @@ from fastapi import FastAPI, Request, Response, status
 from fastapi.responses import JSONResponse
 from starlette.concurrency import run_in_threadpool
 from starlette.middleware.base import RequestResponseEndpoint
-from starlette.routing import BaseRoute
+from starlette.routing import Route
 
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator
@@ -62,7 +62,7 @@ def create_app(
         response = await call_next(request)
         response.headers["X-Request-ID"] = request_id
         route = request.scope.get("route")
-        route_template = route.path if isinstance(route, BaseRoute) else "unmatched"
+        route_template = route.path if isinstance(route, Route) else "unmatched"
         _request_logger.info(
             json.dumps(
                 {

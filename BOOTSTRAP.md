@@ -63,6 +63,41 @@ pnpm install --frozen-lockfile
 
 `pnpm install --frozen-lockfile` must consume the checked-in `pnpm-lock.yaml`. Dependency updates are explicit reviewable changes to a manifest and lockfile, never an implicit bootstrap side effect.
 
+## Local API and database
+
+The development database stays on its internal Docker network and does not
+publish a host port. On the supported Linux bootstrap target, start PostgreSQL
+and resolve its private bridge address before starting the API from the host:
+
+```sh
+docker compose --profile development up --detach --wait postgres
+database_container=$(docker compose --profile development ps --quiet postgres)
+database_host=$(docker inspect \
+  --format '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' \
+  "$database_container")
+test -n "$database_host"
+
+PGPASSWORD=$(tr -d '\r\n' < .secrets/postgres-development-password)
+export PGPASSWORD
+export DOCUMENTZ_DATABASE_URL="postgresql+psycopg://documentz@${database_host}:5432/documentz"
+.tools/uv-0.12.19/uv run --frozen uvicorn documentz_api.main:app \
+  --host 127.0.0.1 --port 8000
+```
+
+The password remains outside command arguments and must not be printed or copied
+into issue output. In a second shell, verify process liveness and database
+readiness:
+
+```sh
+curl --fail --show-error http://127.0.0.1:8000/health/live
+curl --fail --show-error http://127.0.0.1:8000/health/ready
+```
+
+Stop the API, clear its shell credentials with `unset PGPASSWORD
+DOCUMENTZ_DATABASE_URL`, and stop Compose with `docker compose --profile
+development down`. This private-bridge host path is Linux-specific; do not work
+around another platform by publishing PostgreSQL publicly.
+
 Other CPU architectures require the matching official artifact and checksum and
 are not yet a supported bootstrap target. Future separately verified platform
 recipes must not change the pinned runtime versions.
