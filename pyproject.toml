@@ -1,0 +1,45 @@
+[project]
+name = "documentz-workspace"
+version = "0.1.0"
+requires-python = "==3.14.*"
+dependencies = [
+    "documentz-api",
+    "documentz-application",
+    "documentz-domain",
+    "documentz-infrastructure",
+    "documentz-worker",
+]
+
+[dependency-groups]
+dev = [
+    "hatchling==1.32.4",
+    "mypy==2.3.1",
+    "pytest==9.1.1",
+    "ruff==0.16.9",
+]
+
+[tool.uv.sources]
+documentz-api = { workspace = true }
+documentz-application = { workspace = true }
+documentz-domain = { workspace = true }
+documentz-infrastructure = { workspace = true }
+documentz-worker = { workspace = true }
+
+[tool.uv.workspace]
+members = ["apps/api", "apps/worker", "packages/*"]
+
+[tool.ruff]
+target-version = "py314"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+
+[tool.pytest.ini_options]
+addopts = ["--strict-config", "--strict-markers"]
+testpaths = ["tests"]
+
+[tool.mypy]
+python_version = "3.14"
+strict = true
+warn_unreachable = true
