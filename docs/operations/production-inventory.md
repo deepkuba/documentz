@@ -118,7 +118,11 @@ reload and retain a rollback copy under the Caddy owner's normal process.
 <!-- inventory:mounted-secret-directory -->
 | Mounted secret directory | Owner-provided absolute directory or secret-mount mechanism; root-owned and unreadable by unrelated users | `owner-required` | Host administrator / secret custodian | Host mount/service definition | `stat` directory/files, access tests as service and unrelated user; never `cat` values | Allocate secret files with one purpose per file and documented rotation |
 <!-- inventory:database-credential -->
-| PostgreSQL application credential | Secret reference/file name, database role name, scope, rotation and recovery owner only | `owner-required` | Database/secret custodian | Mounted secret metadata and PostgreSQL role catalog | Connect as application role, verify required schema privileges and denied superuser capabilities | Generate unique credential and document rotation without recording value |
+| PostgreSQL runtime credentials | Separate API and worker role names (or an explicit, reviewed decision to share), secret references, scopes, rotation and recovery owners only | `owner-required` | Database/secret custodian | Mounted secret metadata and PostgreSQL role catalog | Connect as each runtime role; verify only required DML/job privileges and denied schema/superuser capabilities | Define the API/worker role boundary, generate credentials, and document rotation without recording values |
+<!-- inventory:database-migration-credential -->
+| PostgreSQL migration credential | Dedicated role and secret reference with schema-migration privileges, unavailable to API and worker runtimes | `owner-required` | Database/secret custodian / release owner | Release secret metadata and PostgreSQL role catalog | Apply migrations as release identity; prove runtime identities cannot perform DDL or assume the role | Provision only to the gated migration step and document rotation/revocation |
+<!-- inventory:database-backup-credential -->
+| PostgreSQL backup credential | Dedicated role and secret reference with the minimum consistent-dump privileges, unavailable to application containers | `owner-required` | Database/secret custodian / backup operator | Backup service secret metadata and PostgreSQL role catalog | Produce and restore a consistent disposable dump; prove the role cannot mutate application data or perform DDL | Provision to the root-owned backup service and document rotation/revocation |
 <!-- inventory:oidc-credential -->
 | OIDC client credential | Provider registration ID, secret reference, redirect/base URL binding, rotation owner; secret value excluded | `owner-required` | Identity owner / OIDC provider | Provider application registration and mounted secret metadata | Complete test login for allowlisted owner and reject mismatched subject/redirect | Register after canonical base URL is fixed; store secret only in approved secret location |
 <!-- inventory:oauth-signing-key -->
@@ -127,9 +131,9 @@ reload and retain a rollback copy under the Caddy owner's normal process.
 | Portal session key material | Secret reference, custodian, rotation and invalidation procedure only | `dependent-task` | P01 implementer and secret custodian | Session design and mounted secret metadata | Session issuance/rotation/logout tests; secret-leak scan | P01 fixes exact requirement; custodian provisions independent key material |
 
 Deployment credentials are separate identities: registry publisher, registry puller,
-host deployer, database application role, OIDC client, and cryptographic keys must
-not share a reusable credential. Every credential requires least privilege,
-rotation, revocation, and an accountable custodian.
+host deployer, database runtime, migration, and backup roles, OIDC client, and
+cryptographic keys must not share a reusable credential. Every credential requires
+least privilege, rotation, revocation, and an accountable custodian.
 
 ## Backup keys, scheduling, and recovery dependencies
 
@@ -152,15 +156,20 @@ rotation, revocation, and an accountable custodian.
 <!-- inventory:restore-sandbox -->
 | Isolated restore environment | Owner-provided non-production host/project with capacity and network isolation | `owner-required` | Recovery owner / hosting provider | Recovery environment inventory | Confirm production ingress/DNS cannot target sandbox; perform destructive restore there | Allocate sandbox before first recovery certification |
 <!-- inventory:purge-tombstone-source -->
-| Purge tombstone replay source | Authoritative, backup-visible non-content tombstone storage and replay checkpoint | `dependent-task` | L02/R03 implementers | Database migration and recovery-runbook artifacts | Restore older dump, replay newer tombstones before readiness, prove purged content remains unavailable | L02 defines durable record/export; R03 integrates replay ordering and evidence |
+| Purge tombstone replay source | Database tombstones plus a monotonic export/checkpoint into the independent purge ledger; restored data is never its own sole replay source | `dependent-task` | L02/R03 implementers | Database migration, purge-ledger protocol, and recovery-runbook artifacts | Restore backup N, replay ledger entries after N's checkpoint, and prove later-purged content remains unavailable | L02 defines transactional export/checkpoint semantics; R03 integrates replay ordering and evidence |
+<!-- inventory:purge-ledger-storage -->
+| Independent purge ledger storage | Append-only, integrity-protected non-content ledger outside the PostgreSQL backup generation it repairs; location, identity, retention, monotonic sequence, and last durable checkpoint | `dependent-task` | L02/R03 implementers / backup security owner | Separate restricted NAS repository/object namespace and recovery metadata | Deny mutation by application/database roles; detect gaps/tampering; retain ledger at least as long as every recoverable backup; withhold readiness when the required checkpoint is unavailable | L02 defines the ledger/export protocol and least-privilege writer; R03 provisions it and rehearses loss/tamper/gap failures |
 <!-- inventory:index-rebuild-capacity -->
 | Full index rebuild dependency | Embedding image/model digest availability, CPU/RAM headroom, estimated duration, and operator | `dependent-task` | V03/R03 implementers and host administrator | Model registry/cache policy, benchmark evidence, recovery runbook | Delete derived indexes in sandbox and rebuild from authoritative data within measured envelope | V03 records model/version/resources; R03 proves from-zero rebuild after restore |
 
 Authoritative backups include consistent PostgreSQL data and required non-secret
-configuration. Vector/lexical indexes are rebuilt. Recovery cannot open readiness
-until schema migration is valid, purge tombstones are replayed, authorization is
-current, and required indexes are either safely rebuilt or explicitly degraded per
-the implemented readiness policy.
+configuration. The independently durable append-only purge ledger is retained at
+least as long as every backup it may need to repair and records a monotonic backup
+checkpoint/watermark. Vector/lexical indexes are rebuilt. Recovery cannot open
+readiness until schema migration is valid, the ledger is present and gap-free,
+every tombstone after the restored backup's checkpoint is replayed, authorization
+is current, and required indexes are either safely rebuilt or explicitly degraded
+per the implemented readiness policy.
 
 ## Dependency and readiness order
 

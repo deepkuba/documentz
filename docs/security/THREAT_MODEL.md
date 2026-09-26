@@ -166,9 +166,14 @@ drills detect truncation, tampering, wrong keys, incompatible migrations, and
 missing configuration.
 
 A restore occurs in an isolated restore environment. It must restore PostgreSQL,
-apply compatible migrations, replay every purge tombstone that postdates or is
-otherwise required for the restored snapshot, and rebuild lexical/vector indexes.
-External readiness stays false until lifecycle and authorization checks pass.
+apply compatible migrations, then replay every required purge tombstone from an
+independently durable, append-only, integrity-protected non-content purge ledger.
+The ledger lives outside the PostgreSQL backup generation it repairs, is retained
+at least as long as recoverable backups, and binds monotonic sequence numbers to
+backup checkpoints. A missing ledger, gap, invalid integrity proof, or checkpoint
+mismatch keeps external readiness false. Recovery tests restore backup N and prove
+that tombstones committed after N are replayed before lifecycle/authorization
+checks and index rebuilding permit traffic.
 Restored tokens/secrets remain subject to expiry/revocation; separately managed
 production secrets are re-provisioned rather than recovered from source control.
 
@@ -236,7 +241,9 @@ test at the closest public seam and retain it in CI.
   alerts and bounded degradation.
 - Perform an isolated destructive restore from encrypted NAS data, including
   corrupted/wrong-key failures, migration compatibility, purge replay before
-  readiness, authorization checks, and complete index rebuild.
+  readiness, authorization checks, and complete index rebuild. Restore an older
+  backup while replaying independently retained tombstones created afterward, and
+  reject missing, truncated, reordered, or tampered ledger input.
 
 ## Security review workflow
 

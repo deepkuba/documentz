@@ -41,6 +41,8 @@ REQUIRED_ITEMS = {
     "production-config-location",
     "mounted-secret-directory",
     "database-credential",
+    "database-migration-credential",
+    "database-backup-credential",
     "oidc-credential",
     "oauth-signing-key",
     "session-signing-key",
@@ -53,6 +55,7 @@ REQUIRED_ITEMS = {
     "restore-operator",
     "restore-sandbox",
     "purge-tombstone-source",
+    "purge-ledger-storage",
     "index-rebuild-capacity",
 }
 

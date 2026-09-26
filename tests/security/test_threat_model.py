@@ -39,6 +39,15 @@ class ThreatModelDocumentationTests(unittest.TestCase):
         ):
             self.assertIn(section.casefold(), text)
 
+        for purge_recovery_control in (
+            "independently durable",
+            "append-only",
+            "backup checkpoints",
+            "missing ledger",
+            "tombstones committed after",
+        ):
+            self.assertIn(purge_recovery_control, text)
+
 
 if __name__ == "__main__":
     unittest.main()
