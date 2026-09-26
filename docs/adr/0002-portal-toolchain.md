@@ -1,0 +1,5 @@
+# Use React, Vite, and Vitest for the Portal
+
+The Portal will use React 19.3.0 with TypeScript 7.0.2, Vite 8.3.1 for development and production builds, and Vitest 5.0.1 for component tests. Node.js 24.21.0 LTS is the sole supported JavaScript runtime and pnpm 12.5.1 owns the checked-in lockfile; ESLint 10.10.0 and Prettier 3.9.9 provide linting and formatting. This is a cohesive ESM-first stack: Vite and ESLint both support Node 24, and Vitest shares Vite's transform/configuration model.
+
+Compatibility evidence (checked 2026-09-26): [Node.js release status](https://nodejs.org/en/about/previous-releases), [Vite 8 Node support](https://vite.dev/blog/announcing-vite8), [React package](https://www.npmjs.com/package/react), [Vitest package](https://www.npmjs.com/package/vitest), [TypeScript package](https://www.npmjs.com/package/typescript), [pnpm package](https://www.npmjs.com/package/pnpm), [ESLint 10 release notes](https://eslint.org/blog/2026/09/eslint-v10.10.0-released/), and [Prettier package](https://www.npmjs.com/package/prettier).

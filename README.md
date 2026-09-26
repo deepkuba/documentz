@@ -149,7 +149,7 @@ A separate search cluster would add operational cost before it solves a demonstr
 
 The remote MCP server uses Streamable HTTP and OAuth. Its planned tools cover:
 
-- project listing, creation, and updates;
+- project listing, creation, updates, and archival;
 - document storage, listing, retrieval, and editing;
 - lexical, semantic, and hybrid search;
 - lifecycle changes except permanent purge;
@@ -164,6 +164,9 @@ A future `recreate_context` orchestration tool is intentionally deferred. The Po
 ### HTTP API
 
 The public API is versioned under `/d/api/v1/` and documented through OpenAPI. HTTP and MCP are adapters over the same application services, so neither receives privileged lifecycle or authorization behavior.
+
+Framework-neutral HTTP and MCP payloads are maintained in
+[the canonical public contract examples](./docs/public-contract-examples.md).
 
 The API uses:
 
@@ -268,6 +271,10 @@ Recommended reserved capacity is approximately:
 The embedding service, database, API, and worker receive resource limits because the PoC shares its host with other workloads.
 
 Daily encrypted backups are sent through Tailscale to a NAS and retained for 30 days. Failed transfers temporarily retain encrypted local backups and raise an alert. Vector indexes are rebuilt rather than backed up. Restoring an older backup replays purge tombstones before the service becomes available.
+
+The non-secret values, ownership, verification steps, and current readiness gaps
+for that environment are tracked in the
+[production and recovery inventory](./docs/operations/production-inventory.md).
 
 ## Security and privacy posture
 

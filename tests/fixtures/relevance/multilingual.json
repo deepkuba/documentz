@@ -1,0 +1,214 @@
+{
+  "fixture_version": 1,
+  "description": "Synthetic multilingual relevance judgments for repeatable retrieval benchmarks.",
+  "data_classification": "synthetic_non_sensitive",
+  "documents": [
+    {
+      "id": "doc-en-rainwater-source",
+      "language": "en",
+      "fixture_role": "source",
+      "title": "Balcony rainwater plan",
+      "content": "A covered barrel collects runoff from the balcony canopy. A mesh screen keeps leaves out, and the stored water is used for herbs during dry weeks. The overflow drains away from the building foundation."
+    },
+    {
+      "id": "doc-en-rainwater-summary",
+      "language": "en",
+      "fixture_role": "summary",
+      "title": "Rainwater plan summary",
+      "content": "Collect roof runoff in a screened container, use it to irrigate balcony herbs, and route excess water safely away from the building."
+    },
+    {
+      "id": "doc-pl-rainwater-source",
+      "language": "pl",
+      "fixture_role": "source",
+      "title": "Plan zbierania deszczówki",
+      "content": "Woda z daszku balkonowego trafia do przykrytego zbiornika z sitkiem na liście. Zapas służy do podlewania ziół w czasie suszy, a przelew odprowadza nadmiar z dala od fundamentów."
+    },
+    {
+      "id": "doc-pl-rainwater-summary",
+      "language": "pl",
+      "fixture_role": "summary",
+      "title": "Podsumowanie planu deszczówki",
+      "content": "Deszczówkę należy gromadzić w osłoniętym pojemniku, podlewać nią zioła i bezpiecznie odprowadzać nadmiar wody."
+    },
+    {
+      "id": "doc-en-bike-source",
+      "language": "en",
+      "fixture_role": "source",
+      "title": "Winter bicycle checklist",
+      "content": "Before winter rides, inspect brake pads, fit lights, lower tire pressure slightly for grip, and wipe salt from the chain after returning home."
+    },
+    {
+      "id": "doc-pl-bike-source",
+      "language": "pl",
+      "fixture_role": "source",
+      "title": "Przygotowanie roweru do zimy",
+      "content": "Przed jazdą zimą sprawdź klocki hamulcowe i lampki. Po powrocie usuń sól z łańcucha, a ciśnienie w oponach obniż nieznacznie dla lepszej przyczepności."
+    },
+    {
+      "id": "doc-en-bread-source",
+      "language": "en",
+      "fixture_role": "source",
+      "title": "Small sourdough schedule",
+      "content": "Feed the starter in the morning, mix the dough at noon, fold it three times, shape it in the evening, and refrigerate overnight before baking."
+    },
+    {
+      "id": "doc-pl-library-source",
+      "language": "pl",
+      "fixture_role": "source",
+      "title": "Zasady wypożyczania książek",
+      "content": "Biblioteka pozwala wypożyczyć pięć książek na trzy tygodnie. Termin można przedłużyć online, jeśli nikt nie zarezerwował danego tytułu."
+    },
+    {
+      "id": "doc-en-multitopic-long",
+      "language": "en",
+      "fixture_role": "multi_topic_long_document",
+      "title": "Community workshop notes",
+"content": " session: volunteers compared clay and sandy soil, then agreed to collect canopy runoff in a covered barrel. A removable mesh screen will stop leaves and insects. Stored rainwater will irrigate balcony herbs during dry weeks, while a fitted overflow pipe will carry excess water away from the foundation. Kitchen session: the group tested a sourdough timetable, feeding starter after breakfast, folding dough through the afternoon, and chilling the shaped loaf overnight. Bicycle session: riders checked lamps and brake pads, discussed modest tire-pressure changes for winter grip, and planned to rinse road salt from chains. Library session: organizers catalogued donated novels and set a three-week loan period. These independent notes share one document so retrieval should select the relevant passage rather than treating every topic as relevant. Tool storage session: the team labelled drawers for measuring tapes, clamps, goggles, and spare fasteners, then recorded a monthly inventory routine that is unrelated to gardening, baking, cycling, or lending. Room booking session: coordinators compared weekday availability, key handover procedures, chair layouts, accessibility routes, and quiet hours without changing any other workshop decision. Energy session: volunteers logged radiator settings, window seals, meter-reading dates, and appliance standby loads as a separate facilities topic. First-aid session: organizers checked expiry dates, emergency contact cards, incident forms, and the location of the sealed medical kit. Printing session: the group chose recycled paper, duplex defaults, monochrome drafts, and a naming convention for posters before sending approved files. Audio session: participants tested microphone cables, speaker stands, volume limits, and a checklist for returning borrowed equipment. Cleaning session: caretakers assigned bins, neutral detergent, reusable cloths, ventilation time, and a sign-off sheet for the workbench. Accessibility session: reviewers measured doorway clearance, adjusted table spacing, marked a step-free route, and prepared large-print signs. Scheduling session: the committee recorded meeting dates, cancellation notices, substitute facilitators, and a neutral agenda template. Closing reminder: for rainwater, the screened covered barrel and foundation-safe overflow remain the controlling details; for winter bicycles, brake pads, lights, tire grip, and salt removal remain the controlling details; for sourdough, morning feeding, afternoon folds, evening shaping, and overnight chilling remain the controlling details. Extended second circuit of workshop notes:  session: volunteers compared clay and sandy soil, then agreed to collect canopy runoff in a covered barrel. A removable mesh screen will stop leaves and insects. Stored rainwater will irrigate balcony herbs during dry weeks, while a fitted overflow pipe will carry excess water away from the foundation. Kitchen session: the group tested a sourdough timetable, feeding starter after breakfast, folding dough through the afternoon, and chilling the shaped loaf overnight. Bicycle session: riders checked lamps and brake pads, discussed modest tire-pressure changes for winter grip, and planned to rinse road salt from chains. Library session: organizers catalogued donated novels and set a three-week loan period. These independent notes share one document so retrieval should select the relevant passage rather than treating every topic as relevant. Tool storage session: the team labelled drawers for measuring tapes, clamps, goggles, and spare fasteners, then recorded a monthly inventory routine that is unrelated to gardening, baking, cycling, or lending. Room booking session: coordinators compared weekday availability, key handover procedures, chair layouts, accessibility routes, and quiet hours without changing any other workshop decision. Energy session: volunteers logged radiator settings, window seals, meter-reading dates, and appliance standby loads as a separate facilities topic. First-aid session: organizers checked expiry dates, emergency contact cards, incident forms, and the location of the sealed medical kit. Printing session: the group chose recycled paper, duplex defaults, monochrome drafts, and a naming convention for posters before sending approved files. Audio session: participants tested microphone cables, speaker stands, volume limits, and a checklist for returning borrowed equipment. Cleaning session: caretakers assigned bins, neutral detergent, reusable cloths, ventilation time, and a sign-off sheet for the workbench. Accessibility session: reviewers measured doorway clearance, adjusted table spacing, marked a step-free route, and prepared large-print signs. Scheduling session: the committee recorded meeting dates, cancellation notices, substitute facilitators, and a neutral agenda template. Closing reminder: for rainwater, the screened covered barrel and foundation-safe overflow remain the controlling details; for winter bicycles, brake pads, lights, tire grip, and salt removal remain the controlling details; for sourdough, morning feeding, afternoon folds, evening shaping, and overnight chilling remain the controlling details. Late-only retrieval sentinel: the cobalt badge is stored inside the west cabinet. The overlap probe requires the phrase copper lantern protocol to remain searchable even when a candidate boundary falls between copper lantern and protocol."
+    },
+    {
+      "id": "doc-pl-multitopic-long",
+      "language": "pl",
+      "fixture_role": "multi_topic_long_document",
+      "title": "Notatki z warsztatów sąsiedzkich",
+      "content": "Ogród: uczestnicy zaplanowali zbieranie wody z daszku do zamkniętego zbiornika. Sitko zatrzyma liście i owady, zapas deszczówki nawodni zioła podczas suszy, a rura przelewowa skieruje nadmiar z dala od fundamentów. Kuchnia: grupa ustaliła harmonogram chleba na zakwasie, od porannego karmienia zaczynu po nocne chłodzenie bochenka. Rowery: sprawdzono lampki i hamulce oraz omówiono usuwanie soli z łańcucha. Biblioteka: skatalogowano podarowane powieści i przyjęto trzytygodniowy termin zwrotu. Tematy są niezależne, mimo że znajdują się w jednym długim dokumencie. Magazyn narzędzi: zespół opisał szuflady na miarki, zaciski, okulary ochronne i zapasowe śruby oraz ustalił comiesięczny spis, niezwiązany z ogrodem, pieczeniem, rowerami ani biblioteką. Rezerwacja sali: koordynatorzy porównali dostępność w dni robocze, przekazywanie kluczy, układ krzeseł, drogę bez barier i godziny ciszy, nie zmieniając innych ustaleń. Energia: wolontariusze zapisali ustawienia grzejników, stan uszczelek okiennych, terminy odczytów liczników i pobór urządzeń w trybie czuwania. Pierwsza pomoc: organizatorzy sprawdzili daty ważności, karty kontaktów alarmowych, formularze zdarzeń i położenie zamkniętej apteczki. Druk: grupa wybrała papier z odzysku, druk dwustronny, czarno-białe wersje robocze i sposób nazywania zatwierdzonych plakatów. Dźwięk: uczestnicy przetestowali przewody mikrofonowe, statywy, limity głośności i listę zwrotu wypożyczonego sprzętu. Sprzątanie: opiekunowie przydzielili pojemniki, łagodny detergent, ściereczki wielorazowe, czas wietrzenia i kartę odbioru stołu roboczego. Dostępność: sprawdzono szerokość drzwi, odstępy między stołami, oznaczenie trasy bez stopni i przygotowanie napisów dużą czcionką. Terminy: komitet zapisał daty spotkań, zasady odwoływania, zastępczych prowadzących i neutralny wzór porządku obrad. Przypomnienie końcowe: dla deszczówki decydują osłonięty zbiornik, sitko i przelew od fundamentów; dla zimowego roweru klocki, lampki, przyczepność opon i usuwanie soli; dla zakwasu poranne karmienie, składanie ciasta, wieczorne formowanie i nocne chłodzenie. Rozszerzony drugi obieg notatek warsztatowych: Ogród: uczestnicy zaplanowali zbieranie wody z daszku do zamkniętego zbiornika. Sitko zatrzyma liście i owady, zapas deszczówki nawodni zioła podczas suszy, a rura przelewowa skieruje nadmiar z dala od fundamentów. Kuchnia: grupa ustaliła harmonogram chleba na zakwasie, od porannego karmienia zaczynu po nocne chłodzenie bochenka. Rowery: sprawdzono lampki i hamulce oraz omówiono usuwanie soli z łańcucha. Biblioteka: skatalogowano podarowane powieści i przyjęto trzytygodniowy termin zwrotu. Tematy są niezależne, mimo że znajdują się w jednym długim dokumencie. Magazyn narzędzi: zespół opisał szuflady na miarki, zaciski, okulary ochronne i zapasowe śruby oraz ustalił comiesięczny spis, niezwiązany z ogrodem, pieczeniem, rowerami ani biblioteką. Rezerwacja sali: koordynatorzy porównali dostępność w dni robocze, przekazywanie kluczy, układ krzeseł, drogę bez barier i godziny ciszy, nie zmieniając innych ustaleń. Energia: wolontariusze zapisali ustawienia grzejników, stan uszczelek okiennych, terminy odczytów liczników i pobór urządzeń w trybie czuwania. Pierwsza pomoc: organizatorzy sprawdzili daty ważności, karty kontaktów alarmowych, formularze zdarzeń i położenie zamkniętej apteczki. Druk: grupa wybrała papier z odzysku, druk dwustronny, czarno-białe wersje robocze i sposób nazywania zatwierdzonych plakatów. Dźwięk: uczestnicy przetestowali przewody mikrofonowe, statywy, limity głośności i listę zwrotu wypożyczonego sprzętu. Sprzątanie: opiekunowie przydzielili pojemniki, łagodny detergent, ściereczki wielorazowe, czas wietrzenia i kartę odbioru stołu roboczego. Dostępność: sprawdzono szerokość drzwi, odstępy między stołami, oznaczenie trasy bez stopni i przygotowanie napisów dużą czcionką. Terminy: komitet zapisał daty spotkań, zasady odwoływania, zastępczych prowadzących i neutralny wzór porządku obrad. Przypomnienie końcowe: dla deszczówki decydują osłonięty zbiornik, sitko i przelew od fundamentów; dla zimowego roweru klocki, lampki, przyczepność opon i usuwanie soli; dla zakwasu poranne karmienie, składanie ciasta, wieczorne formowanie i nocne chłodzenie. Znacznik dostępny tylko w późnym fragmencie: kobaltowa plakietka leży w zachodniej szafce. Próba nakładania wymaga, aby fraza protokół bursztynowej latarni pozostała wyszukiwalna, gdy granica fragmentu wypada między protokół bursztynowej a latarni."
+    },
+    {
+      "id": "doc-en-distractor-water",
+      "language": "en",
+      "fixture_role": "distractor",
+      "title": "Indoor plant watering",
+      "content": "Check potting soil with a finger before watering houseplants. Empty standing water from saucers and keep tropical plants away from cold windows."
+    },
+    {
+      "id": "doc-pl-distractor-weather",
+      "language": "pl",
+      "fixture_role": "distractor",
+      "title": "Prognoza deszczowego weekendu",
+      "content": "W sobotę przewidywane są przelotne opady i silny wiatr. Organizatorzy przełożyli piknik na niedzielne popołudnie."
+    }
+  ],
+  "queries": [
+    {
+      "id": "query-en-rainwater-paraphrase",
+      "coverage": "english",
+      "language": "en",
+      "kind": "paraphrase",
+      "text": "How can I save water from the balcony roof for plants without harming the house?",
+      "relevant_document_ids": ["doc-en-rainwater-source", "doc-en-rainwater-summary", "doc-en-multitopic-long"],
+      "non_relevant_document_ids": ["doc-pl-rainwater-source", "doc-pl-rainwater-summary", "doc-en-bike-source", "doc-pl-bike-source", "doc-en-bread-source", "doc-pl-library-source", "doc-pl-multitopic-long", "doc-en-distractor-water", "doc-pl-distractor-weather"]
+    },
+    {
+      "id": "query-en-bike-paraphrase",
+      "coverage": "english",
+      "language": "en",
+      "kind": "paraphrase",
+      "text": "What maintenance keeps a cycle safe when roads are cold and salty?",
+      "relevant_document_ids": ["doc-en-bike-source", "doc-en-multitopic-long"],
+      "non_relevant_document_ids": ["doc-en-rainwater-source", "doc-en-rainwater-summary", "doc-pl-rainwater-source", "doc-pl-rainwater-summary", "doc-pl-bike-source", "doc-en-bread-source", "doc-pl-library-source", "doc-pl-multitopic-long", "doc-en-distractor-water", "doc-pl-distractor-weather"]
+    },
+    {
+      "id": "query-en-summary",
+      "coverage": "english",
+      "language": "en",
+      "kind": "summary",
+      "text": "Find the concise English note about storing roof runoff for herbs.",
+      "relevant_document_ids": ["doc-en-rainwater-summary"],
+      "non_relevant_document_ids": ["doc-en-rainwater-source", "doc-pl-rainwater-source", "doc-pl-rainwater-summary", "doc-en-bike-source", "doc-pl-bike-source", "doc-en-bread-source", "doc-pl-library-source", "doc-en-multitopic-long", "doc-pl-multitopic-long", "doc-en-distractor-water", "doc-pl-distractor-weather"]
+    },
+    {
+      "id": "query-pl-rainwater-paraphrase",
+      "coverage": "polish",
+      "language": "pl",
+      "kind": "paraphrase",
+      "text": "Jak wykorzystać opady z balkonu do nawadniania roślin i zabezpieczyć budynek?",
+      "relevant_document_ids": ["doc-pl-rainwater-source", "doc-pl-rainwater-summary", "doc-pl-multitopic-long"],
+      "non_relevant_document_ids": ["doc-en-rainwater-source", "doc-en-rainwater-summary", "doc-en-bike-source", "doc-pl-bike-source", "doc-en-bread-source", "doc-pl-library-source", "doc-en-multitopic-long", "doc-en-distractor-water", "doc-pl-distractor-weather"]
+    },
+    {
+      "id": "query-pl-bike-paraphrase",
+      "coverage": "polish",
+      "language": "pl",
+      "kind": "paraphrase",
+      "text": "Co zrobić z hamulcami, oponami i napędem przed zimową jazdą?",
+      "relevant_document_ids": ["doc-pl-bike-source", "doc-pl-multitopic-long"],
+      "non_relevant_document_ids": ["doc-en-rainwater-source", "doc-en-rainwater-summary", "doc-pl-rainwater-source", "doc-pl-rainwater-summary", "doc-en-bike-source", "doc-en-bread-source", "doc-pl-library-source", "doc-en-multitopic-long", "doc-en-distractor-water", "doc-pl-distractor-weather"]
+    },
+    {
+      "id": "query-pl-summary",
+      "coverage": "polish",
+      "language": "pl",
+      "kind": "summary",
+      "text": "Znajdź krótkie podsumowanie zasad używania deszczówki.",
+      "relevant_document_ids": ["doc-pl-rainwater-summary"],
+      "non_relevant_document_ids": ["doc-en-rainwater-source", "doc-en-rainwater-summary", "doc-pl-rainwater-source", "doc-en-bike-source", "doc-pl-bike-source", "doc-en-bread-source", "doc-pl-library-source", "doc-en-multitopic-long", "doc-pl-multitopic-long", "doc-en-distractor-water", "doc-pl-distractor-weather"]
+    },
+    {
+      "id": "query-en-to-pl-rainwater",
+      "coverage": "cross_language",
+      "language": "en",
+      "kind": "cross_language_paraphrase",
+      "text": "Which Polish notes explain collecting rain from a canopy to water herbs?",
+      "relevant_document_ids": ["doc-pl-rainwater-source", "doc-pl-rainwater-summary", "doc-pl-multitopic-long"],
+      "non_relevant_document_ids": ["doc-en-rainwater-source", "doc-en-rainwater-summary", "doc-en-bike-source", "doc-pl-bike-source", "doc-en-bread-source", "doc-pl-library-source", "doc-en-multitopic-long", "doc-en-distractor-water", "doc-pl-distractor-weather"]
+    },
+    {
+      "id": "query-pl-to-en-bike",
+      "coverage": "cross_language",
+      "language": "pl",
+      "kind": "cross_language_paraphrase",
+      "text": "Które angielskie notatki opisują przygotowanie roweru na słone zimowe drogi?",
+      "relevant_document_ids": ["doc-en-bike-source", "doc-en-multitopic-long"],
+      "non_relevant_document_ids": ["doc-en-rainwater-source", "doc-en-rainwater-summary", "doc-pl-rainwater-source", "doc-pl-rainwater-summary", "doc-pl-bike-source", "doc-en-bread-source", "doc-pl-library-source", "doc-pl-multitopic-long", "doc-en-distractor-water", "doc-pl-distractor-weather"]
+    },
+    {
+      "id": "query-pl-to-en-bread",
+      "coverage": "cross_language",
+      "language": "pl",
+      "kind": "cross_language_paraphrase",
+      "text": "Znajdź angielski harmonogram przygotowania chleba na zakwasie przez noc.",
+      "relevant_document_ids": ["doc-en-bread-source", "doc-en-multitopic-long"],
+      "non_relevant_document_ids": ["doc-en-rainwater-source", "doc-en-rainwater-summary", "doc-pl-rainwater-source", "doc-pl-rainwater-summary", "doc-en-bike-source", "doc-pl-bike-source", "doc-pl-library-source", "doc-pl-multitopic-long", "doc-en-distractor-water", "doc-pl-distractor-weather"]
+    },
+    {
+      "id": "query-en-late-passage",
+      "coverage": "english",
+      "language": "en",
+      "kind": "late_passage",
+      "text": "Where is the cobalt badge stored?",
+      "relevant_document_ids": ["doc-en-multitopic-long"],
+      "non_relevant_document_ids": ["doc-en-rainwater-source", "doc-en-rainwater-summary", "doc-pl-rainwater-source", "doc-pl-rainwater-summary", "doc-en-bike-source", "doc-pl-bike-source", "doc-en-bread-source", "doc-pl-library-source", "doc-pl-multitopic-long", "doc-en-distractor-water", "doc-pl-distractor-weather"],
+      "passage_expectation": {"evidence_text":"cobalt badge","minimum_utf8_offset":4096}
+    },
+    {
+      "id": "query-pl-late-passage",
+      "coverage": "polish",
+      "language": "pl",
+      "kind": "late_passage",
+      "text": "Gdzie leży kobaltowa plakietka?",
+      "relevant_document_ids": ["doc-pl-multitopic-long"],
+      "non_relevant_document_ids": ["doc-en-rainwater-source", "doc-en-rainwater-summary", "doc-pl-rainwater-source", "doc-pl-rainwater-summary", "doc-en-bike-source", "doc-pl-bike-source", "doc-en-bread-source", "doc-pl-library-source", "doc-en-multitopic-long", "doc-en-distractor-water", "doc-pl-distractor-weather"],
+      "passage_expectation": {"evidence_text":"kobaltowa plakietka","minimum_utf8_offset":4096}
+    },
+    {
+      "id": "query-en-boundary-overlap",
+      "coverage": "english",
+      "language": "en",
+      "kind": "boundary_overlap",
+      "text": "What copper lantern protocol is recorded?",
+      "relevant_document_ids": ["doc-en-multitopic-long"],
+      "non_relevant_document_ids": ["doc-en-rainwater-source", "doc-en-rainwater-summary", "doc-pl-rainwater-source", "doc-pl-rainwater-summary", "doc-en-bike-source", "doc-pl-bike-source", "doc-en-bread-source", "doc-pl-library-source", "doc-pl-multitopic-long", "doc-en-distractor-water", "doc-pl-distractor-weather"],
+      "passage_expectation": {"minimum_utf8_offset":4096,"boundary_left":"copper lantern","boundary_right":" protocol","boundary_after_utf8_byte":5347,"requires_boundary_evidence":true}
+    },
+    {
+      "id": "query-pl-boundary-overlap",
+      "coverage": "polish",
+      "language": "pl",
+      "kind": "boundary_overlap",
+      "text": "Jaki protokół bursztynowej latarni zapisano?",
+      "relevant_document_ids": ["doc-pl-multitopic-long"],
+      "non_relevant_document_ids": ["doc-en-rainwater-source", "doc-en-rainwater-summary", "doc-pl-rainwater-source", "doc-pl-rainwater-summary", "doc-en-bike-source", "doc-pl-bike-source", "doc-en-bread-source", "doc-pl-library-source", "doc-en-multitopic-long", "doc-en-distractor-water", "doc-pl-distractor-weather"],
+      "passage_expectation": {"minimum_utf8_offset":4096,"boundary_left":"protokół bursztynowej","boundary_right":" latarni","boundary_after_utf8_byte":4586,"requires_boundary_evidence":true}
+    }
+  ]
+}
