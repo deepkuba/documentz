@@ -7,7 +7,6 @@ import os
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 
-
 config = context.config
 database_url = os.environ.get("DOCUMENTZ_DATABASE_URL")
 if not database_url:
