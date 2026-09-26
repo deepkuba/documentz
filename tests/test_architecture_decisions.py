@@ -39,7 +39,14 @@ class ArchitectureDecisionTests(unittest.TestCase):
         bootstrap_path = ROOT / "BOOTSTRAP.md"
         self.assertTrue(bootstrap_path.is_file(), "BOOTSTRAP.md must define clean-checkout setup")
         bootstrap = bootstrap_path.read_text(encoding="utf-8")
-        for command in ("uv sync --frozen", "pnpm install --frozen-lockfile"):
+        for command in (
+            "uv-x86_64-unknown-linux-gnu.tar.gz",
+            "node-v24.21.0-linux-x64.tar.xz",
+            "sha256sum --check -",
+            "uv sync --frozen",
+            "corepack prepare pnpm@12.5.1 --activate",
+            "pnpm install --frozen-lockfile",
+        ):
             self.assertIn(command, bootstrap)
 
         plan = (ROOT / "IMPLEMENTATION_PLAN.md").read_text(encoding="utf-8")

@@ -4,9 +4,22 @@ Foundation versions are pinned in [`toolchain.toml`](./toolchain.toml). F02 and 
 
 ## Python workspace
 
-Install uv 0.12.19 using a [verified official method](https://docs.astral.sh/uv/getting-started/installation/). Confirm the binary before allowing it to create or alter the environment, then run:
+The reproducible bootstrap target is Linux x86-64. Download the exact official
+uv release artifact and its publisher-provided checksum into a temporary
+directory, verify it, and install it into the checkout-local `.tools` directory:
 
 ```sh
+mkdir -p .tools/downloads .tools/uv-0.12.19
+curl --fail --location --proto '=https' --tlsv1.2 \
+  --output .tools/downloads/uv.tar.gz \
+  https://github.com/astral-sh/uv/releases/download/0.12.19/uv-x86_64-unknown-linux-gnu.tar.gz
+curl --fail --location --proto '=https' --tlsv1.2 \
+  --output .tools/downloads/uv.tar.gz.sha256 \
+  https://github.com/astral-sh/uv/releases/download/0.12.19/uv-x86_64-unknown-linux-gnu.tar.gz.sha256
+(cd .tools/downloads && sed 's/  uv-x86_64-unknown-linux-gnu.tar.gz$/  uv.tar.gz/' uv.tar.gz.sha256 | sha256sum --check -)
+tar --extract --gzip --file .tools/downloads/uv.tar.gz \
+  --directory .tools/uv-0.12.19 --strip-components=1
+export PATH="$PWD/.tools/uv-0.12.19:$PATH"
 uv --version                 # must report uv 0.12.19
 uv python install 3.14.7
 uv sync --frozen
@@ -16,9 +29,21 @@ uv sync --frozen
 
 ## Portal workspace
 
-Install Node.js 24.21.0 from an [official signed distribution](https://nodejs.org/en/download/archive/v24), verify its published checksum/signature, enable Corepack, and activate the pinned package manager:
+For Linux x86-64, download the exact Node.js archive and the release checksum
+manifest, verify the selected line, and unpack it into `.tools`:
 
 ```sh
+curl --fail --location --proto '=https' --tlsv1.2 \
+  --output .tools/downloads/node.tar.xz \
+  https://nodejs.org/dist/v24.21.0/node-v24.21.0-linux-x64.tar.xz
+curl --fail --location --proto '=https' --tlsv1.2 \
+  --output .tools/downloads/node-SHASUMS256.txt \
+  https://nodejs.org/dist/v24.21.0/SHASUMS256.txt
+(cd .tools/downloads && grep '  node-v24.21.0-linux-x64.tar.xz$' node-SHASUMS256.txt | sed 's/  node-v24.21.0-linux-x64.tar.xz$/  node.tar.xz/' | sha256sum --check -)
+mkdir -p .tools/node-v24.21.0
+tar --extract --file .tools/downloads/node.tar.xz \
+  --directory .tools/node-v24.21.0 --strip-components=1
+export PATH="$PWD/.tools/node-v24.21.0/bin:$PATH"
 node --version               # must report v24.21.0
 corepack enable
 corepack prepare pnpm@12.5.1 --activate
@@ -27,6 +52,10 @@ pnpm install --frozen-lockfile
 ```
 
 `pnpm install --frozen-lockfile` must consume the checked-in `pnpm-lock.yaml`. Dependency updates are explicit reviewable changes to a manifest and lockfile, never an implicit bootstrap side effect.
+
+Other CPU architectures require the matching official artifact and checksum and
+are not yet a supported bootstrap target; F02/F03 may add separately verified
+platform recipes without changing the pinned runtime versions.
 
 ## Canonical checks
 
