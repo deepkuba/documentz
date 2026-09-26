@@ -5,3 +5,4 @@ node_modules/
 apps/portal/coverage/
 apps/portal/dist/
 *.tsbuildinfo
+.secrets/
