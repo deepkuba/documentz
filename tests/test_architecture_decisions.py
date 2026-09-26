@@ -49,6 +49,12 @@ class ArchitectureDecisionTests(unittest.TestCase):
         ):
             self.assertIn(command, bootstrap)
 
+        portal_section = bootstrap.split("## Portal workspace", 1)[1]
+        self.assertLess(
+            portal_section.index("mkdir -p .tools/downloads .tools/node-v24.21.0"),
+            portal_section.index("--output .tools/downloads/node.tar.xz"),
+        )
+
         plan = (ROOT / "IMPLEMENTATION_PLAN.md").read_text(encoding="utf-8")
         self.assertIn(
             "- [x] Select and record the OAuth library, PostgreSQL job library, and frontend build stack in short ADRs.",

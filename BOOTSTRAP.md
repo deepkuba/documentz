@@ -33,6 +33,7 @@ For Linux x86-64, download the exact Node.js archive and the release checksum
 manifest, verify the selected line, and unpack it into `.tools`:
 
 ```sh
+mkdir -p .tools/downloads .tools/node-v24.21.0
 curl --fail --location --proto '=https' --tlsv1.2 \
   --output .tools/downloads/node.tar.xz \
   https://nodejs.org/dist/v24.21.0/node-v24.21.0-linux-x64.tar.xz
@@ -40,7 +41,6 @@ curl --fail --location --proto '=https' --tlsv1.2 \
   --output .tools/downloads/node-SHASUMS256.txt \
   https://nodejs.org/dist/v24.21.0/SHASUMS256.txt
 (cd .tools/downloads && grep '  node-v24.21.0-linux-x64.tar.xz$' node-SHASUMS256.txt | sed 's/  node-v24.21.0-linux-x64.tar.xz$/  node.tar.xz/' | sha256sum --check -)
-mkdir -p .tools/node-v24.21.0
 tar --extract --file .tools/downloads/node.tar.xz \
   --directory .tools/node-v24.21.0 --strip-components=1
 export PATH="$PWD/.tools/node-v24.21.0/bin:$PATH"
